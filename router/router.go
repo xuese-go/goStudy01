@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	loginApi "github.com/xuese-go/goStudy01/api/login"
 )
 
 /*
@@ -23,16 +24,26 @@ func routers(r *gin.Engine) {
 
 	//模板路径-html文件地址
 	r.LoadHTMLGlob("views/**/*")
+	//静态文件路径
+	r.Static("/static", "static")
 
-	//主入口
+	//页面路由
 	index := r.Group("/")
 	{
-		//主模块
+		//页面处理
 		ind := index.Group("/")
-		ind.GET("/", func(c *gin.Context) {
-			c.HTML(200, "index/index.html", nil)
+		ind.GET("/", func(context *gin.Context) {
+			context.HTML(200, "index/index.html", nil)
 		})
 	}
+
+	//api路由
+	apis := r.Group("/api")
+	{
+		login := apis.Group("/login")
+		login.POST("/login", loginApi.Login)
+	}
+
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {
 	// 	c.JSON(200, gin.H{
 	// 		"message": c.Param("a") + c.Param("b"),
