@@ -6,11 +6,16 @@ $(function(){
             dataType: 'json',
             data: $('#login-form').serialize()
         }).done(function(e){
-            console.log()
-            // window.location.href="/"
+            if(e.success){
+                window.localStorage.setItem("xueSeToken",e.data);
+                if(window.localStorage.getItem("xueSeToken")) {
+                    window.location.href = window.origin + "/page/home"
+                }
+            }else{
+                $("#msg").text(e.msg)
+            }
         }).fail(function(err){
-            console.log(err.responseJSON.msg)
-            console.log("err")
+            $("#msg").text("系统错误")
         })
     })
 })

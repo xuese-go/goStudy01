@@ -1,8 +1,9 @@
 package router
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	loginApi "github.com/xuese-go/goStudy01/api/login"
+	"github.com/xuese-go/goStudy01/api/login/controller"
 )
 
 /*
@@ -32,8 +33,15 @@ func routers(r *gin.Engine) {
 	{
 		//页面处理
 		ind := index.Group("/")
+		//主页面-登录页面
 		ind.GET("/", func(context *gin.Context) {
 			context.HTML(200, "index/index.html", nil)
+		})
+
+		ind2 := index.Group("/page", interceptToken())
+		//home页面
+		ind2.GET("/home", func(context *gin.Context) {
+			context.HTML(200, "home/home.html", nil)
 		})
 	}
 
@@ -41,7 +49,7 @@ func routers(r *gin.Engine) {
 	apis := r.Group("/api")
 	{
 		login := apis.Group("/login")
-		login.POST("/login", loginApi.Login)
+		login.POST("/login", controller.Login)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {
@@ -61,4 +69,13 @@ func routers(r *gin.Engine) {
 	// 	c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
 	// })
 
+}
+
+//token 中间件
+func interceptToken() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fmt.Println(c.Request.Header)
+		c.Next()
+		fmt.Println("2222222222")
+	}
 }
