@@ -3,7 +3,10 @@ package router
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/xuese-go/goStudy01/api/login/controller"
+	loginController "github.com/xuese-go/goStudy01/api/login/controller"
+	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
+	userController "github.com/xuese-go/goStudy01/api/user/controller"
+	"strings"
 )
 
 /*
@@ -38,18 +41,35 @@ func routers(r *gin.Engine) {
 			context.HTML(200, "index/index.html", nil)
 		})
 
-		ind2 := index.Group("/page", interceptToken())
+		ind2 := index.Group("/page")
 		//home页面
 		ind2.GET("/home", func(context *gin.Context) {
 			context.HTML(200, "home/home.html", nil)
 		})
+		//	用户管理页面
+		ind2.GET("/user", func(context *gin.Context) {
+			context.HTML(200, "user/user.html", nil)
+		})
 	}
 
 	//api路由
-	apis := r.Group("/api")
+	apis := r.Group("/api", interceptToken())
 	{
+		//login
 		login := apis.Group("/login")
-		login.POST("/login", controller.Login)
+		login.POST("/login", loginController.Login)
+
+		//	notice
+		notice := apis.Group("/notice")
+		notice.GET("/notice", noticeController.GetNotices)
+
+		//user
+		user := apis.Group("/user")
+		user.POST("/user", userController.Save)
+		user.DELETE("/user/:deleteId", userController.Delete)
+		user.PUT("/user/:putId", userController.Update)
+		user.GET("/user/:getId", userController.One)
+		user.GET("/users", userController.Page)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {
@@ -74,8 +94,14 @@ func routers(r *gin.Engine) {
 //token 中间件
 func interceptToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println(c.Request.Header)
-		c.Next()
-		fmt.Println("2222222222")
+		//是否是登录
+		path := c.Request.URL.Path
+		if strings.Contains(path, "api/login/") {
+			c.Next()
+		} else {
+			//	判断token
+			token := c.Request.Header.Get("xueSeToken")
+			fmt.Print(token)
+		}
 	}
 }
