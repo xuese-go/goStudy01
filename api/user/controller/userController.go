@@ -1,10 +1,12 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
+	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
-	"time"
+	"strconv"
 )
 
 /*
@@ -19,8 +21,9 @@ func Save(ctx *gin.Context) {
 	}
 
 	if user.Password == pwd2 {
-		user.CreateTime = time.Now()
-		resp.Respone(ctx, resp.ResponeStruct{Success: true, Data: &user})
+		respond := service.Save(user)
+		fmt.Println(respond)
+		resp.Respone(ctx, respond)
 	} else {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "两次密码不一致"})
 	}
@@ -66,9 +69,13 @@ func One(ctx *gin.Context) {
 func Page(ctx *gin.Context) {
 	pageNum := ctx.Query("pageNum")
 	pageSize := ctx.Query("pageSize")
+	acc := ctx.Query("account")
 
-	resp.Respone(ctx, resp.ResponeStruct{Success: true, Data: gin.H{
-		"pageNum":  pageNum,
-		"pageSize": pageSize,
-	}})
+	var user structs.UserStruct
+	user.Account = acc
+	n, _ := strconv.Atoi(pageNum)
+	s, _ := strconv.Atoi(pageSize)
+	res := service.Page(n, s, user)
+
+	resp.Respone(ctx, res)
 }

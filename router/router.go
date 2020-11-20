@@ -12,7 +12,7 @@ import (
 /*
 初始化
 */
-func Init() {
+func init() {
 	// 加载默认配置
 	r := gin.Default()
 
