@@ -16,6 +16,8 @@ func init() {
 		fmt.Print(err)
 	}
 
+	//打印sql
+	Db.LogMode(true)
 	//关闭闲置的连接
 	//defer Db.Close()
 	fmt.Println("数据库连接成功")

@@ -24,6 +24,7 @@ $(function () {
 
 //分页查询
 function page() {
+    $("#table-content").find("tr").remove()
     $.ajax("/api/user/users", {
         type: "GET",
         dataType: 'json',
@@ -33,9 +34,10 @@ function page() {
             "account": $("#table_search").val()
         }
     }).done(function (e) {
-        console.log(e)
         if (e.success) {
-
+            $(e.data).each(function (i, o) {
+                $("#table-content").append(trs(i,o))
+            })
         } else {
 
         }
@@ -45,10 +47,10 @@ function page() {
 }
 
 //tr模板
-function trs(e) {
+function trs(i,e) {
     return '<tr>'
-        + '    <td>1</td>'
-        + '    <td>lkfjldjpoawhpfmhpliadsfljoo</td>'
+        + '    <td>'+(i+1)+'</td>'
+        + '    <td>'+(e.account)+'</td>'
         + '    <td><span class="badge bg-danger">管理员</span><span class="badge bg-primary">普通</span></td>'
         + '    <td><span class="badge bg-success">正常</span><span class="badge bg-secondary">停用</span></td>'
         + '    <td>'

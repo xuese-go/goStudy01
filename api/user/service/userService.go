@@ -40,6 +40,8 @@ func Save(user structs.UserStruct) resp.ResponeStruct {
 分页查询
 */
 func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct {
+	us := make([]structs.UserStruct, 0)
+	db.Db.Find(&us)
 	//us := make([]structs.UserStruct, 0)
 	//a := ""
 	////b := make([]string, 0)
@@ -52,5 +54,5 @@ func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct
 	//	fmt.Println(err)
 	//	return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	//}
-	return resp.ResponeStruct{Success: true, Data: nil}
+	return resp.ResponeStruct{Success: true, Data: us}
 }

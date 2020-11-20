@@ -6,6 +6,8 @@ import (
 	loginController "github.com/xuese-go/goStudy01/api/login/controller"
 	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
+	"io"
+	"os"
 	"strings"
 )
 
@@ -15,6 +17,10 @@ import (
 func init() {
 	// 加载默认配置
 	r := gin.Default()
+
+	//日志
+	file, _ := os.Create("goStudy01.log")
+	gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
 
 	// 路由
 	routers(r)
