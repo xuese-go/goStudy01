@@ -14,13 +14,14 @@ func init() {
 	Db, err = gorm.Open("mysql", dsn)
 	if err != nil {
 		fmt.Print(err)
+	} else {
+		fmt.Println("数据库连接成功")
 	}
 
 	//打印sql
 	Db.LogMode(true)
 	//关闭闲置的连接
 	//defer Db.Close()
-	fmt.Println("数据库连接成功")
 
 	//tables := make(map[string]interface{}, 0)
 	//tables["user_table"] = &structs.UserStruct{}
