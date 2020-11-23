@@ -1,22 +1,44 @@
+var pageNum = 1
+var pageSize = 10
 $(function () {
     //分页
     page()
     //查询
-    $("#user-form-search").bind("click", function () {
+    $("#form-search").bind("click", function () {
         page()
     })
     //新增
-    $("#user-form-save").on("submit", function (ev) {
+    $("#form-save").on("submit", function (ev) {
         ev.preventDefault();
         $.ajax("/api/user/user", {
             type: "POST",
             dataType: 'json',
-            data: $('#user-form-save').serialize()
+            data: $('#form-save').serialize()
         }).done(function (e) {
             if (e.success) {
                 alter2(1, "成功")
-                $("#user-btn-to-save").click()
-                $('#user-form-save')[0].reset()
+                $("#btn-to-save").click()
+                $('#form-save')[0].reset()
+                page()
+            } else {
+                alter2(3, e.msg)
+            }
+        }).fail(function (err) {
+
+        })
+    })
+//    修改
+    $("#form-update").on("submit", function (ev) {
+        ev.preventDefault();
+        $.ajax("/api/user/user/" + $("#uuid2").val(), {
+            type: "PUT",
+            dataType: 'json',
+            data: $('#form-update').serialize()
+        }).done(function (e) {
+            if (e.success) {
+                alter2(1, "成功")
+                $("#btn-to-update").click()
+                $('#form-update')[0].reset()
                 page()
             } else {
                 alter2(3, e.msg)
@@ -27,21 +49,34 @@ $(function () {
     })
 })
 
+//分页标签
+function pageLabel(o) {
+    pageNum = o
+    page()
+}
+
 //分页查询
 function page() {
     $("#table-content").find("tr").remove()
+    $("#table-page").find("li").remove()
     $.ajax("/api/user/users", {
         type: "GET",
         dataType: 'json',
         data: {
-            "pageNum": 1,
-            "pageSize": 10,
+            "pageNum": pageNum,
+            "pageSize": pageSize,
             "account": $("#table_search").val()
         }
     }).done(function (e) {
         if (e.success) {
             $(e.data).each(function (i, o) {
                 $("#table-content").append(trs(i, o))
+            })
+            //    分页
+            $(e.page.pageData).each(function (i, o) {
+                let a = (o === pageNum ? 'active' : '')
+                let l = '<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
+                $("#table-page").append(l)
             })
         } else {
 
@@ -64,8 +99,9 @@ function trs(i, e) {
         + '</td>'
         + '<td>'
         + '<button type="button" class="btn btn-danger btn-xs" onclick="del(\'' + e.uuid + '\')">删除</button>'
-        + '&nbsp;&nbsp;&nbsp;'
-        + '<button type="button" class="btn btn-warning btn-xs">修改/查看</button>'
+        + '&nbsp;&nbsp;'
+        + '<button type="button" class="btn btn-warning btn-xs" onclick="one(\'' + e.uuid + '\')"' +
+        ' data-toggle="modal" data-target="#modal-update">修改/查看</button>'
         + '</td>'
         + '</tr>'
 }
@@ -87,5 +123,24 @@ function del(o) {
 
             })
         }
+    })
+}
+
+//根据id获取
+function one(e) {
+    $.ajax("/api/user/user/" + e, {
+        type: "GET",
+        dataType: 'json'
+    }).done(function (e) {
+        if (e.success) {
+            $("#uuid2").val(e.data.uuid)
+            $("#exampleInputEmail12").val(e.data.account)
+            $("#role2").val(e.data.role)
+            $("#state2").val(e.data.state)
+        } else {
+            alter2(3, e.msg)
+        }
+    }).fail(function (err) {
+
     })
 }

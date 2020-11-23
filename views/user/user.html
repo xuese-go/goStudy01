@@ -10,8 +10,8 @@
                                 class="btn btn-success btn-xs"
                                 style="height: 31px"
                                 data-toggle="modal"
-                                data-target="#modal-save-user"
-                                id="user-btn-to-save"
+                                data-target="#modal-save"
+                                id="btn-to-save"
                         >新增
                         </button>
                     </div>
@@ -20,7 +20,7 @@
                             <input type="text" id="table_search" class="form-control float-right"
                                    placeholder="Search">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-default" id="user-form-search">
+                                <button type="button" class="btn btn-default" id="form-search">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
@@ -56,23 +56,14 @@
             <!-- /.card-body -->
             <div class="card-footer clearfix">
                 <ul class="pagination pagination-sm m-0 float-right" id="table-page">
-                    <li class="page-item"><a class="page-link" href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">«</font></font></a></li>
-                    <li class="page-item"><a class="page-link" href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">1</font></font></a></li>
-                    <li class="page-item"><a class="page-link" href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">2</font></font></a></li>
-                    <li class="page-item"><a class="page-link" href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">3</font></font></a></li>
-                    <li class="page-item"><a class="page-link" href="#"><font style="vertical-align: inherit;"><font
-                                        style="vertical-align: inherit;">»</font></font></a></li>
+                    <li class="page-item"><a class="page-link" href="#"></a></li>
                 </ul>
             </div>
             <!-- /.card-footer-->
         </div>
     </div>
 
-    <div class="modal fade" id="modal-save-user">
+    <div class="modal fade" id="modal-save">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -82,7 +73,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="user-form-save">
+                    <form role="form" id="form-save">
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Email</label>
@@ -96,7 +87,7 @@
                                        placeholder="Enter email">
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputPassword1">Password</label>
+                                <label for="exampleInputPassword1">密码</label>
                                 <input type="password"
                                        name="password"
                                        class="form-control"
@@ -107,7 +98,7 @@
                                        placeholder="Password">
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputPassword2">Password2</label>
+                                <label for="exampleInputPassword2">再次输入密码</label>
                                 <input type="password"
                                        name="password2"
                                        class="form-control"
@@ -134,6 +125,65 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-block btn-primary">确定</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div class="modal fade" id="modal-update">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">修改用户</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="form-update">
+                        <div class="card-body">
+                            <input type="hidden" name="uuid" id="uuid2">
+                            <div class="form-group">
+                                <label for="exampleInputEmail12">Email</label>
+                                <input type="email"
+                                       class="form-control"
+                                       id="exampleInputEmail12"
+                                       readonly
+                                       minlength="7"
+                                       maxlength="15"
+                                       placeholder="Enter email">
+                            </div>
+                            <div class="form-group">
+                                <label for="role2">角色</label>
+                                <select class="form-control" name="role" id="role2" required>
+                                    <option value="1">普通</option>
+                                    <option value="2">管理员</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="state2">状态</label>
+                                <select class="form-control" name="state" id="state2" required>
+                                    <option value="1">正常</option>
+                                    <option value="2">停用</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-block btn-primary">确定</button>
+                            <button type="button"
+                                    style="display: none"
+                                    data-toggle="modal"
+                                    data-target="#modal-update"
+                                    id="btn-to-update"
+                            >新增
+                            </button>
                         </div>
                     </form>
                 </div>

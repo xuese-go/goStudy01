@@ -15,6 +15,8 @@ type ResponeStruct struct {
 	Msg string `json:"msg"`
 	//数据
 	Data interface{} `json:"data"`
+	//	分页信息
+	Page interface{} `json:"page"`
 }
 
 func Respone(context *gin.Context, resp ResponeStruct) {

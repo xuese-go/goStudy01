@@ -5,6 +5,7 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"log"
 	"strconv"
 )
 
@@ -16,6 +17,7 @@ func Save(ctx *gin.Context) {
 	var user structs.UserStruct
 	if err := ctx.ShouldBind(&user); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
+		log.Panic(err.Error())
 		return
 	}
 
@@ -42,14 +44,15 @@ func Delete(ctx *gin.Context) {
 func Update(ctx *gin.Context) {
 	uuid := ctx.Param("putId")
 	var user structs.UserStruct
-	err := ctx.Bind(&user)
-	if err != nil {
+	if err := ctx.ShouldBind(&user); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
+		log.Panic(err.Error())
 		return
 	}
 
 	user.Uuid = uuid
-	resp.Respone(ctx, resp.ResponeStruct{Success: true, Data: user})
+	respond := service.Update(user)
+	resp.Respone(ctx, respond)
 }
 
 /**
@@ -57,8 +60,8 @@ func Update(ctx *gin.Context) {
 */
 func One(ctx *gin.Context) {
 	uuid := ctx.Param("getId")
-
-	resp.Respone(ctx, resp.ResponeStruct{Success: true, Data: uuid})
+	respond := service.One(uuid)
+	resp.Respone(ctx, respond)
 }
 
 /**
