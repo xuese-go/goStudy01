@@ -95,7 +95,7 @@ func routers(r *gin.Engine) {
 	// 	// Upload the file to specific dst.
 	// 	// c.SaveUploadedFile(file, dst)
 
-	// 	c.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", file.Filename))
+	// 	c.String(http.StatusOK, log.Sprintf("'%s' uploaded!", file.Filename))
 	// })
 
 }
