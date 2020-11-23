@@ -99,6 +99,19 @@ func One(uuid string) resp.ResponeStruct {
 }
 
 /**
+根据账号查询
+*/
+func ByAccount(account string) resp.ResponeStruct {
+	dba := db.Db
+	var u structs.UserStruct
+	if err := dba.First(&u, "account = ?", account).Error; err != nil {
+		log.Println(err.Error())
+		return resp.ResponeStruct{Success: false, Msg: "账号或密码错误"}
+	}
+	return resp.ResponeStruct{Success: true, Msg: "操作成功", Data: u}
+}
+
+/**
 分页查询
 */
 func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct {

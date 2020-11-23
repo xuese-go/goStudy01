@@ -1,5 +1,5 @@
-let t;
-let Toast;
+var t;
+var Toast;
 $(function () {
     t = window.localStorage.getItem("xueSeToken")
     if (!t) {
@@ -7,9 +7,19 @@ $(function () {
     }
 //    全局设置
     $.ajaxSetup({
-        header: {"xueSeToken": t},
         timeout: 2000,
-        dataType: "json"
+        dataType: "json",
+        beforeSend: function (request) {
+            request.setRequestHeader("xueSeToken", t);
+        },
+        error: function (err) {
+            if (!err.responseJSON.success && err.responseJSON.data === '-1') {
+                alter2(4, err.responseJSON.msg)
+                window.location.href = window.origin + "/"
+            } else {
+                console.log(err.responseJSON)
+            }
+        }
     });
     //弹窗全局设置
     Toast = Swal.mixin({
@@ -20,6 +30,8 @@ $(function () {
 
     //获取消息
     getNotice()
+    //获取当前登录用户信息
+    getInfo()
 
     //注销登录
     $("#logout").click(function () {
@@ -96,6 +108,19 @@ function getNotice() {
                     $("#notice-item").append(h)
                 }
             })
+        }
+    }).fail(function (err) {
+
+    })
+}
+
+function getInfo() {
+    $.ajax("/api/user/user", {
+        type: "GET",
+        dataType: 'json'
+    }).done(function (e) {
+        if (e.success) {
+            $("#info").text(e.data.account)
         }
     }).fail(function (err) {
 

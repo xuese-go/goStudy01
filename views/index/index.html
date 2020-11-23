@@ -27,14 +27,16 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <form action="#" method="post" id="login-form">
+                <form id="login-form">
                     <div class="input-group mb-3">
                         <input type="email"
                                class="form-control"
                                placeholder="Email"
                                name="account"
                                required="required"
-                               value="111@qq.com"
+                               minlength="7"
+                               maxlength="15"
+                               value="11@qq.com"
                         >
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -48,7 +50,9 @@
                                placeholder="Password"
                                name="password"
                                required="required"
-                               value="11111"
+                               minlength="6"
+                               maxlength="8"
+                               value="111111"
                         >
                         <div class="input-group-append">
                             <div class="input-group-text">
@@ -57,18 +61,18 @@
                         </div>
                     </div>
                     <div class="row">
-                        <p class="mb-1">
-                            <a href="#" id="msg"></a>
-                        </p>
-                    </div>
-                    <div class="row">
                         <div class="col-12">
-                            <button type="button" class="btn btn-primary btn-block" id="login-btn">登 录</button>
+                            <button type="submit" class="btn btn-primary btn-block">登 录</button>
                         </div>
                     </div>
                 </form>
 
                 <div class="social-auth-links text-center mb-3">
+                    <div class="row">
+                        <p class="mb-1">
+                            <a href="#" id="msg"></a>
+                        </p>
+                    </div>
                     <p>- OR -</p>
                     <a href="#" class="btn btn-block btn-primary">
                         注册一个账号

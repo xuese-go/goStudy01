@@ -1,12 +1,14 @@
 package router
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	loginController "github.com/xuese-go/goStudy01/api/login/controller"
 	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
+	"github.com/xuese-go/goStudy01/api/respone/structs"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"io"
+	"log"
+	"net/http"
 	"os"
 	"strings"
 )
@@ -44,17 +46,17 @@ func routers(r *gin.Engine) {
 		ind := index.Group("/")
 		//主页面-登录页面
 		ind.GET("/", func(context *gin.Context) {
-			context.HTML(200, "index/index.html", nil)
+			context.HTML(http.StatusOK, "index/index.html", nil)
 		})
 
 		ind2 := index.Group("/page")
 		//home页面
 		ind2.GET("/home", func(context *gin.Context) {
-			context.HTML(200, "home/home.html", nil)
+			context.HTML(http.StatusOK, "home/home.html", nil)
 		})
 		//	用户管理页面
 		ind2.GET("/user", func(context *gin.Context) {
-			context.HTML(200, "user/user.html", nil)
+			context.HTML(http.StatusOK, "user/user.html", nil)
 		})
 	}
 
@@ -76,6 +78,7 @@ func routers(r *gin.Engine) {
 		user.PUT("/user/:putId", userController.Update)
 		user.GET("/user/:getId", userController.One)
 		user.GET("/users", userController.Page)
+		user.GET("/user", userController.Info)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {
@@ -107,7 +110,13 @@ func interceptToken() gin.HandlerFunc {
 		} else {
 			//	判断token
 			token := c.Request.Header.Get("xueSeToken")
-			fmt.Print(token)
+			log.Println("token:", token)
+			if token != "" {
+				c.Next()
+			} else {
+				c.Abort()
+				c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "-1"})
+			}
 		}
 	}
 }

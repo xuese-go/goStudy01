@@ -65,6 +65,15 @@ func One(ctx *gin.Context) {
 }
 
 /**
+根据令牌查询
+*/
+func Info(ctx *gin.Context) {
+	token := ctx.Request.Header.Get("xueSeToken")
+	respond := service.One(token)
+	resp.Respone(ctx, respond)
+}
+
+/**
 分页
 */
 func Page(ctx *gin.Context) {
