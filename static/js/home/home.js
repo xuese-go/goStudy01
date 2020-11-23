@@ -15,8 +15,6 @@ $(function () {
     Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
-        showConfirmButton: false,
-        timer: 2000
     });
     //----------------------------------------------------------------------
 
@@ -61,7 +59,22 @@ function alter2(icon, title) {
     }
     Toast.fire({
         icon: icon,
-        title: title
+        title: title,
+        showConfirmButton: false,
+        timer: 2000
+    })
+}
+
+//弹窗提示
+function alter2IsOk(butText) {
+    return Swal.fire({
+        icon: 'warning',
+        showConfirmButton: true,
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: butText,
+        showCancelButton: true,
+        cancelButtonColor: '#d33',
+        cancelButtonText: "取消"
     })
 }
 

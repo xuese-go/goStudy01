@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
@@ -22,7 +21,6 @@ func Save(ctx *gin.Context) {
 
 	if user.Password == pwd2 {
 		respond := service.Save(user)
-		fmt.Println(respond)
 		resp.Respone(ctx, respond)
 	} else {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "两次密码不一致"})
@@ -34,8 +32,8 @@ func Save(ctx *gin.Context) {
 */
 func Delete(ctx *gin.Context) {
 	uuid := ctx.Param("deleteId")
-
-	resp.Respone(ctx, resp.ResponeStruct{Success: true, Data: uuid})
+	respond := service.DeleteById(uuid)
+	resp.Respone(ctx, respond)
 }
 
 /**

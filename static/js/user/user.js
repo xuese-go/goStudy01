@@ -1,8 +1,13 @@
 $(function () {
     //分页
     page()
+    //查询
+    $("#user-form-search").bind("click", function () {
+        page()
+    })
     //新增
-    $("#user-btn-save").on("click", function () {
+    $("#user-form-save").on("submit", function (ev) {
+        ev.preventDefault();
         $.ajax("/api/user/user", {
             type: "POST",
             dataType: 'json',
@@ -36,7 +41,7 @@ function page() {
     }).done(function (e) {
         if (e.success) {
             $(e.data).each(function (i, o) {
-                $("#table-content").append(trs(i,o))
+                $("#table-content").append(trs(i, o))
             })
         } else {
 
@@ -47,15 +52,40 @@ function page() {
 }
 
 //tr模板
-function trs(i,e) {
+function trs(i, e) {
     return '<tr>'
-        + '    <td>'+(i+1)+'</td>'
-        + '    <td>'+(e.account)+'</td>'
-        + '    <td><span class="badge bg-danger">管理员</span><span class="badge bg-primary">普通</span></td>'
-        + '    <td><span class="badge bg-success">正常</span><span class="badge bg-secondary">停用</span></td>'
-        + '    <td>'
-        + '        <button type="button" class="btn btn-danger btn-xs">删除</button>'
-        + '        <button type="button" class="btn btn-warning btn-xs">修改/查看</button>'
-        + '    </td>'
+        + '<td>' + (i + 1) + '</td>'
+        + '<td>' + (e.account) + '</td>'
+        + '<td>'
+        + (e.role === 1 ? '<span class="badge bg-primary">普通</span>' : '<span class="badge bg-danger">管理员</span>')
+        + '</td>'
+        + '<td>'
+        + (e.state === 1 ? '<span class="badge bg-success">正常</span>' : '<span class="badge bg-secondary">停用</span>')
+        + '</td>'
+        + '<td>'
+        + '<button type="button" class="btn btn-danger btn-xs" onclick="del(\'' + e.uuid + '\')">删除</button>'
+        + '&nbsp;&nbsp;&nbsp;'
+        + '<button type="button" class="btn btn-warning btn-xs">修改/查看</button>'
+        + '</td>'
         + '</tr>'
+}
+
+//删除
+function del(o) {
+    alter2IsOk("是否确定删除？").then(function (e) {
+        if (e.value) {
+            $.ajax("/api/user/user/" + o, {
+                type: "DELETE",
+                dataType: 'json'
+            }).done(function (e) {
+                if (e.success) {
+                    page()
+                } else {
+                    alter2(4, e.msg)
+                }
+            }).fail(function (err) {
+
+            })
+        }
+    })
 }
