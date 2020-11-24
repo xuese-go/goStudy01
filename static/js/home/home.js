@@ -13,9 +13,11 @@ $(function () {
             request.setRequestHeader("xueSeToken", t);
         },
         error: function (err) {
-            if (!err.responseJSON.success && err.responseJSON.data === '-1') {
+            if (!err.responseJSON.success && err.responseJSON.data === 'logout') {
                 alter2(4, err.responseJSON.msg)
-                window.location.href = window.origin + "/"
+                setTimeout(function () {
+                    window.location.href = window.origin + "/"
+                }, 3000);
             } else {
                 console.log(err.responseJSON)
             }

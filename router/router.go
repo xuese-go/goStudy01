@@ -6,6 +6,7 @@ import (
 	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
 	"github.com/xuese-go/goStudy01/api/respone/structs"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
+	"github.com/xuese-go/goStudy01/api/user/service"
 	"io"
 	"log"
 	"net/http"
@@ -112,10 +113,17 @@ func interceptToken() gin.HandlerFunc {
 			token := c.Request.Header.Get("xueSeToken")
 			log.Println("token:", token)
 			if token != "" {
-				c.Next()
+				//确认账号状态
+				r := service.IsState(token)
+				if r.Success {
+					c.Abort()
+					c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号已被停用或删除", Data: "logout"})
+				} else {
+					c.Next() //写不写 都会执行
+				}
 			} else {
 				c.Abort()
-				c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "-1"})
+				c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
 			}
 		}
 	}

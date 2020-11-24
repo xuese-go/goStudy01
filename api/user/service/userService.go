@@ -99,6 +99,20 @@ func One(uuid string) resp.ResponeStruct {
 }
 
 /**
+根据id 获取是否停用
+*/
+func IsState(uuid string) resp.ResponeStruct {
+	dba := db.Db
+	var u structs.UserStruct
+	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
+		log.Println(err.Error())
+		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
+	}
+	u.Password = ""
+	return resp.ResponeStruct{Success: u.State == 2}
+}
+
+/**
 根据账号查询
 */
 func ByAccount(account string) resp.ResponeStruct {
