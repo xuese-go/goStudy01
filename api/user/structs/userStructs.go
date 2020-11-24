@@ -13,6 +13,7 @@ type UserStruct struct {
 	Password       string    `json:"password" form:"password"`
 	Role           int       `json:"role" form:"role"`   //2 管理员 1普通
 	State          int       `json:"state" form:"state"` //2 停用 1正常
+	Portrait       string    `json:"portrait" form:"portrait"`
 	CreateTime     time.Time `json:"createTime" form:"createTime"`
 	LastUpdateTime time.Time `json:"lastUpdateTime" form:"lastUpdateTime"` //最后修改时间
 }

@@ -90,10 +90,34 @@ func Update(user structs.UserStruct) resp.ResponeStruct {
 	t := tx.Save(&u)
 	if t.Error != nil {
 		t.Rollback()
+		log.Println(t.Error.Error())
 		return resp.ResponeStruct{Success: false, Msg: "失败"}
 	}
 	t.Commit()
 	return resp.ResponeStruct{Success: true, Msg: "成功"}
+}
+
+/**
+更改头像
+*/
+func UpdateImg(src string, uuid string) resp.ResponeStruct {
+	dba := db.Db
+	tx := dba.Begin()
+	var u structs.UserStruct
+	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
+		log.Println(err.Error())
+		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
+	}
+	u.Portrait = src
+	u.LastUpdateTime = time.Now()
+	t := tx.Save(&u)
+	if t.Error != nil {
+		t.Rollback()
+		log.Println(t.Error.Error())
+		return resp.ResponeStruct{Success: false, Msg: "失败"}
+	}
+	t.Commit()
+	return resp.ResponeStruct{Success: true, Msg: "成功", Data: src}
 }
 
 /**

@@ -5,6 +5,7 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/api/util/file"
 	"github.com/xuese-go/goStudy01/api/util/jwt"
 	"log"
 	"strconv"
@@ -54,6 +55,23 @@ func Update(ctx *gin.Context) {
 	user.Uuid = uuid
 	respond := service.Update(user)
 	resp.Respone(ctx, respond)
+}
+
+/**
+根据id修改
+*/
+func UpdateImg(context *gin.Context) {
+	token := context.Request.Header.Get("xueSeToken")
+	if claims, err := jwt.ParseToken(token); err != nil {
+		resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+	} else {
+		if str := file.Up(context); str != "" {
+			respond := service.UpdateImg(str, claims.Uuid)
+			resp.Respone(context, respond)
+		} else {
+			resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "上传失败"})
+		}
+	}
 }
 
 /**

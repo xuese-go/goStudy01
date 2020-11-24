@@ -131,6 +131,9 @@ function getInfo() {
                 $(".admin").show()
             }
             $("#info").text(e.data.account)
+            if (e.data.portrait) {
+                $("#home-user-img").attr("src", "/file/" + e.data.portrait)
+            }
         } else {
             alter2(4, "个人信息获取失败")
         }

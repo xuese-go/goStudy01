@@ -2,12 +2,14 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/xuese-go/goStudy01/api/file/controller"
 	loginController "github.com/xuese-go/goStudy01/api/login/controller"
 	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
 	"github.com/xuese-go/goStudy01/api/respone/structs"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/util/jwt"
+	"github.com/xuese-go/goStudy01/api/util/path"
 	"io"
 	"log"
 	"net/http"
@@ -40,6 +42,7 @@ func routers(r *gin.Engine) {
 	r.LoadHTMLGlob("views/**/*")
 	//静态文件路径
 	r.Static("/static", "static")
+	r.Static("/file", path.PATH)
 
 	//页面路由
 	index := r.Group("/")
@@ -69,6 +72,11 @@ func routers(r *gin.Engine) {
 	//api路由
 	apis := r.Group("/api", interceptToken())
 	{
+		//file
+		file := apis.Group("/file")
+		file.POST("/up", controller.Up)
+		file.GET("/dow", controller.Dow)
+
 		//login
 		login := apis.Group("/login")
 		login.POST("/login", loginController.Login)
@@ -82,6 +90,7 @@ func routers(r *gin.Engine) {
 		user.POST("/user", isAdmin(), userController.Save)
 		user.DELETE("/user/:deleteId", isAdmin(), userController.Delete)
 		user.PUT("/user/:putId", isAdmin(), userController.Update)
+		user.PUT("/file", userController.UpdateImg)
 		user.GET("/user/:getId", userController.One)
 		user.GET("/users", isAdmin(), userController.Page)
 		user.GET("/user", userController.Info)

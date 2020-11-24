@@ -1,9 +1,66 @@
 {{define "user/personal.html"}}
+    <style>
+        .img-circle2:hover {
+            border: 1px solid #17a2b8;
+            cursor: pointer;
+        }
+    </style>
     <!-- Main content -->
     <div class="content">
-        个人中心
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-danger">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                                    <div class="image">
+                                        <img src="/static/img/user2-160x160.jpg"
+                                             class="img-circle img-circle2 elevation-2"
+                                             alt="User Image"
+                                             style="width:200px;height: 200px;"
+                                             title="点击更换头像"
+                                             id="user-image"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">修改密码</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                                       placeholder="Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword2">再次输入密码</label>
+                                                <input type="password" class="form-control" id="exampleInputPassword2"
+                                                       placeholder="Password">
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <label>&nbsp;</label>
+                                            <button type="button" class="btn btn-block btn-primary btn-flat">确定</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        </div>
     </div>
-
     <!-- /.content -->
+    <div style="display: none;">
+        <input type="file" id="file">
+    </div>
     <script src="/static/js/user/personal.js"></script>
 {{end}}
