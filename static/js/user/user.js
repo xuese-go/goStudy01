@@ -1,5 +1,5 @@
 var pageNum = 1
-var pageSize = 10
+var pageSize = 8
 $(function () {
     //分页
     page()
