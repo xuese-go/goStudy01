@@ -4,6 +4,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/api/util/md5"
 	util "github.com/xuese-go/goStudy01/api/util/page"
 	"github.com/xuese-go/goStudy01/db"
 	"log"
@@ -29,6 +30,8 @@ func Save(user structs.UserStruct) resp.ResponeStruct {
 	user.CreateTime = time.Now()
 	user.Role = 1
 	user.State = 1
+	//密码加密处理
+	user.Password = md5.Enc(user.Password)
 
 	//新增数据
 	t := tx.Create(user)
@@ -77,9 +80,10 @@ func Update(user structs.UserStruct) resp.ResponeStruct {
 	if user.Password != "" {
 		//重置密码
 		if user.Password == "rest" {
-			u.Password = "111111"
+			//密码加密处理
+			u.Password = md5.Enc("111111")
 		} else {
-			u.Password = user.Password
+			u.Password = md5.Enc(user.Password)
 		}
 	}
 	u.LastUpdateTime = time.Now()
@@ -179,7 +183,8 @@ func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct
 		dba = dba.Offset((pageNum - 1) * pageSize).Limit(pageSize)
 	}
 	//查询
-	if err := dba.Find(&us).Error; err != nil {
+	if err := dba.Table("user_table").Select([]string{"uuid", "account", "role", "state"}).Scan(&us).Error; err != nil {
+		//if err := dba.Find(&us).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}

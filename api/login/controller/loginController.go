@@ -5,6 +5,7 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/api/util/md5"
 )
 
 /*登录*/
@@ -17,6 +18,8 @@ func Login(context *gin.Context) {
 			resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "该账号已被停止使用"})
 			return
 		}
+		//密码加密
+		pwd = md5.Enc(pwd)
 		if r.Data.(structs.UserStruct).Password == pwd {
 			resp.Respone(context, resp.ResponeStruct{Success: true, Data: r.Data.(structs.UserStruct).Uuid})
 			return
