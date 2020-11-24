@@ -3,6 +3,7 @@ package db
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/xuese-go/goStudy01/api/user/structs"
 	"log"
 )
 
@@ -22,6 +23,14 @@ func init() {
 	Db.LogMode(true)
 	//关闭闲置的连接
 	//defer Db.Close()
+
+	//创建表
+	tables := make([]interface{}, 0)
+	tables = append(tables, &structs.UserStruct{})
+
+	for k := range tables {
+		Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(tables[k])
+	}
 
 	//tables := make(map[string]interface{}, 0)
 	//tables["user_table"] = &structs.UserStruct{}

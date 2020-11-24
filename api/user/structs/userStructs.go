@@ -1,7 +1,6 @@
 package structs
 
 import (
-	"github.com/xuese-go/goStudy01/db"
 	"time"
 )
 
@@ -16,11 +15,6 @@ type UserStruct struct {
 	State          int       `json:"state" form:"state"` //2 停用 1正常
 	CreateTime     time.Time `json:"createTime" form:"createTime"`
 	LastUpdateTime time.Time `json:"lastUpdateTime" form:"lastUpdateTime"` //最后修改时间
-}
-
-func init() {
-	//自动迁移表  默认不支持事务，所以加参数
-	db.Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&UserStruct{})
 }
 
 //更改表名称
