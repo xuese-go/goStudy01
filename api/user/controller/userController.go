@@ -5,6 +5,7 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/api/util/jwt"
 	"log"
 	"strconv"
 )
@@ -87,8 +88,12 @@ func One(ctx *gin.Context) {
 */
 func Info(ctx *gin.Context) {
 	token := ctx.Request.Header.Get("xueSeToken")
-	respond := service.One(token)
-	resp.Respone(ctx, respond)
+	if claims, err := jwt.ParseToken(token); err != nil {
+		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+	} else {
+		respond := service.One(claims.Uuid)
+		resp.Respone(ctx, respond)
+	}
 }
 
 /**

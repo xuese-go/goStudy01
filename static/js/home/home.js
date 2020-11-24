@@ -131,6 +131,8 @@ function getInfo() {
                 $(".admin").show()
             }
             $("#info").text(e.data.account)
+        } else {
+            alter2(4, "个人信息获取失败")
         }
     }).fail(function (err) {
 

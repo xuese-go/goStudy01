@@ -2,11 +2,15 @@ package jwt
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"log"
 	"time"
 )
 
 // 指定加密密钥
 var jwtSecret = []byte("xueSeToken")
+
+//签名
+var Autograph = "xue-se"
 
 //Claim是一些实体（通常指的用户）的状态和额外的元数据
 type Claims struct {
@@ -26,7 +30,7 @@ func GenerateToken(uuid string) (string, error) {
 			// 过期时间
 			ExpiresAt: expireTime.Unix(),
 			// 指定token发行人
-			Issuer: "xue-se",
+			Issuer: Autograph,
 		},
 	}
 
@@ -53,4 +57,29 @@ func ParseToken(token string) (*Claims, error) {
 	}
 	return nil, err
 
+}
+
+//令牌合法性判断
+func IsToken(token string) bool {
+	//解析
+	if t, err := ParseToken(token); err != nil {
+		log.Println("令牌解析错误")
+		return false
+	} else {
+		//签名
+		autograph := t.StandardClaims.Issuer
+		if autograph == Autograph {
+			//判断令牌过期时间
+			cl := t.ExpiresAt
+			//当前时间
+			t := time.Now().Unix()
+			if cl-t < 0 {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
+	}
 }

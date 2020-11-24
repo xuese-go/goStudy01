@@ -13,7 +13,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 /*
@@ -126,13 +125,9 @@ func interceptToken() gin.HandlerFunc {
 					c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌解析失败", Data: "logout"})
 					return
 				} else {
-					//判断令牌过期时间
-					cl := claims.ExpiresAt
-					//当前时间
-					t := time.Now().Unix()
-					//判断令牌是否过期
-					if cl-t < 0 {
-						//	令牌过期
+					//判断令牌合法性
+					if jwt.IsToken(token) {
+						//	令牌非法或过期
 						c.Abort()
 						c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌过期，请从新登录", Data: "logout"})
 						return
@@ -161,10 +156,15 @@ func interceptToken() gin.HandlerFunc {
 func isAdmin() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		token := context.Request.Header.Get("xueSeToken")
-		r := service.IsRole(token)
-		if !r.Success {
+		if claims, err := jwt.ParseToken(token); err != nil {
 			context.Abort()
-			context.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})
+			context.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+		} else {
+			r := service.IsRole(claims.Uuid)
+			if !r.Success {
+				context.Abort()
+				context.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})
+			}
 		}
 	}
 }
