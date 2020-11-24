@@ -7,11 +7,13 @@ import (
 	"github.com/xuese-go/goStudy01/api/respone/structs"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"github.com/xuese-go/goStudy01/api/user/service"
+	"github.com/xuese-go/goStudy01/api/util/jwt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 )
 
 /*
@@ -118,17 +120,38 @@ func interceptToken() gin.HandlerFunc {
 			token := c.Request.Header.Get("xueSeToken")
 			log.Println("token:", token)
 			if token != "" {
-				//确认账号状态
-				r := service.IsState(token)
-				if r.Success {
+				//获取token中的信息
+				if claims, err := jwt.ParseToken(token); err != nil {
 					c.Abort()
-					c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号已被停用或删除", Data: "logout"})
+					c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌解析失败", Data: "logout"})
+					return
 				} else {
-					c.Next() //写不写 都会执行
+					//判断令牌过期时间
+					cl := claims.ExpiresAt
+					//当前时间
+					t := time.Now().Unix()
+					//判断令牌是否过期
+					if cl-t < 0 {
+						//	令牌过期
+						c.Abort()
+						c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌过期，请从新登录", Data: "logout"})
+						return
+					} else {
+						//确认账号状态
+						r := service.IsState(claims.Uuid)
+						if r.Success {
+							c.Abort()
+							c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号已被停用或删除", Data: "logout"})
+							return
+						} else {
+							c.Next() //写不写 都会执行
+						}
+					}
 				}
 			} else {
 				c.Abort()
 				c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+				return
 			}
 		}
 	}

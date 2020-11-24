@@ -5,6 +5,7 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/api/util/jwt"
 	"github.com/xuese-go/goStudy01/api/util/md5"
 )
 
@@ -21,8 +22,14 @@ func Login(context *gin.Context) {
 		//密码加密
 		pwd = md5.Enc(pwd)
 		if r.Data.(structs.UserStruct).Password == pwd {
-			resp.Respone(context, resp.ResponeStruct{Success: true, Data: r.Data.(structs.UserStruct).Uuid})
-			return
+			//生成token
+			if token, err := jwt.GenerateToken(r.Data.(structs.UserStruct).Uuid); err != nil {
+				resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "令牌生成失败"})
+				return
+			} else {
+				resp.Respone(context, resp.ResponeStruct{Success: true, Data: token})
+				return
+			}
 		} else {
 			resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "账号或密码错误"})
 			return
