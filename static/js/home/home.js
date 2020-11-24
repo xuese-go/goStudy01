@@ -5,6 +5,11 @@ $(function () {
     if (!t) {
         window.location.href = window.origin + "/"
     }
+    //弹窗全局设置
+    Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+    });
 //    全局设置
     $.ajaxSetup({
         timeout: 2000,
@@ -13,20 +18,20 @@ $(function () {
             request.setRequestHeader("xueSeToken", t);
         },
         error: function (err) {
-            if (!err.responseJSON.success && err.responseJSON.data === 'logout') {
-                alter2(4, err.responseJSON.msg)
-                setTimeout(function () {
-                    window.location.href = window.origin + "/"
-                }, 3000);
+            console.log(err)
+            if (!err.responseJSON.success) {
+                if (err.responseJSON.data === 'logout') {
+                    alter2(4, err.responseJSON.msg)
+                    setTimeout(function () {
+                        window.location.href = window.origin + "/"
+                    }, 3000);
+                } else if (err.responseJSON.data === '!admin') {
+                    alter2(4, err.responseJSON.msg)
+                }
             } else {
                 console.log(err.responseJSON)
             }
         }
-    });
-    //弹窗全局设置
-    Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
     });
     //----------------------------------------------------------------------
 
@@ -122,6 +127,9 @@ function getInfo() {
         dataType: 'json'
     }).done(function (e) {
         if (e.success) {
+            if (e.data.role === 2) {
+                $(".admin").show()
+            }
             $("#info").text(e.data.account)
         }
     }).fail(function (err) {

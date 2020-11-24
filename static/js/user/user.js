@@ -102,6 +102,8 @@ function trs(i, e) {
         + '&nbsp;&nbsp;'
         + '<button type="button" class="btn btn-warning btn-xs" onclick="one(\'' + e.uuid + '\')"' +
         ' data-toggle="modal" data-target="#modal-update">修改/查看</button>'
+        + '&nbsp;&nbsp;'
+        + '<button type="button" class="btn btn-warning btn-xs" onclick="restPwd(\'' + e.uuid + '\')">重置密码</button>'
         + '</td>'
         + '</tr>'
 }
@@ -137,6 +139,22 @@ function one(e) {
             $("#exampleInputEmail12").val(e.data.account)
             $("#role2").val(e.data.role)
             $("#state2").val(e.data.state)
+        } else {
+            alter2(3, e.msg)
+        }
+    }).fail(function (err) {
+
+    })
+}
+
+//根据id重置密码
+function restPwd(e) {
+    $.ajax("/api/user/rest/pwd/" + e, {
+        type: "GET",
+        dataType: 'json'
+    }).done(function (e) {
+        if (e.success) {
+            alter2(1, "重置成功")
         } else {
             alter2(3, e.msg)
         }

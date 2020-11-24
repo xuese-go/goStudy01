@@ -74,12 +74,13 @@ func routers(r *gin.Engine) {
 
 		//user
 		user := apis.Group("/user")
-		user.POST("/user", userController.Save)
-		user.DELETE("/user/:deleteId", userController.Delete)
-		user.PUT("/user/:putId", userController.Update)
+		user.POST("/user", isAdmin(), userController.Save)
+		user.DELETE("/user/:deleteId", isAdmin(), userController.Delete)
+		user.PUT("/user/:putId", isAdmin(), userController.Update)
 		user.GET("/user/:getId", userController.One)
-		user.GET("/users", userController.Page)
+		user.GET("/users", isAdmin(), userController.Page)
 		user.GET("/user", userController.Info)
+		user.GET("/rest/pwd/:restId", isAdmin(), userController.RestPwd)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {
@@ -125,6 +126,18 @@ func interceptToken() gin.HandlerFunc {
 				c.Abort()
 				c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
 			}
+		}
+	}
+}
+
+//是否是管理员
+func isAdmin() gin.HandlerFunc {
+	return func(context *gin.Context) {
+		token := context.Request.Header.Get("xueSeToken")
+		r := service.IsRole(token)
+		if !r.Success {
+			context.Abort()
+			context.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})
 		}
 	}
 }

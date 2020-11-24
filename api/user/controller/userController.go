@@ -56,6 +56,24 @@ func Update(ctx *gin.Context) {
 }
 
 /**
+根据id修改
+*/
+func RestPwd(ctx *gin.Context) {
+	uuid := ctx.Param("restId")
+	var user structs.UserStruct
+	if err := ctx.ShouldBind(&user); err != nil {
+		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
+		log.Panic(err.Error())
+		return
+	}
+
+	user.Uuid = uuid
+	user.Password = "rest"
+	respond := service.Update(user)
+	resp.Respone(ctx, respond)
+}
+
+/**
 根据主键查询
 */
 func One(ctx *gin.Context) {
