@@ -207,7 +207,7 @@ func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct
 		dba = dba.Offset((pageNum - 1) * pageSize).Limit(pageSize)
 	}
 	//查询
-	if err := dba.Table("user_table").Select([]string{"uuid", "account", "role", "state"}).Scan(&us).Error; err != nil {
+	if err := dba.Table("user_table").Select([]string{"uuid", "account", "role", "state", "portrait"}).Scan(&us).Error; err != nil {
 		//if err := dba.Find(&us).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}

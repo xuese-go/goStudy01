@@ -37,6 +37,17 @@
             <ul class="navbar-nav ml-auto">
                 <!-- Notifications Dropdown Menu -->
                 <li class="nav-item dropdown">
+                    <button class="btn btn-box-tool nav-link"
+                            data-toggle="tooltip"
+                            title="联络人"
+                            data-widget="chat-pane-toggle"
+                            data-id="/chat"
+                            id="chat"
+                    >
+                        <i class="fa fa-comments"></i>
+                    </button>
+                </li>
+                <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
                         <span class="badge badge-warning navbar-badge" id="notice-num">0</span>
@@ -113,7 +124,7 @@
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper" id="content"
-             style="padding-top: 20px;height: 114px;overflow-x: hidden;overflow-y: auto;">
+             style="padding-top: 20px;height: calc(100vh - 114px);overflow-x: hidden;overflow-y: auto;">
 
         </div>
         <!-- /.content-wrapper -->

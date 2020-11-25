@@ -1,0 +1,86 @@
+{{define "chat/chat.html"}}
+    <style>
+        .chat-user:hover{
+            border: 1px solid deepskyblue;
+            cursor: pointer;
+        }
+        .chat-user{
+            margin-bottom: 5px;
+        }
+    </style>
+    <div class="content">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="box box-primary direct-chat direct-chat-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">联系人</h3>
+                    </div>
+                    <div id="chat-user" class="box-body" style="height: calc(100vh - 220px);overflow-x: hidden;overflow-y: auto;padding:20px;">
+                        <div class="row col-12 chat-user">
+                            <img class="direct-chat-img"
+                                 src="/static/img/user1-128x128.jpg"
+                                 alt="消息用户图像">
+                            联系人1
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="input-group">
+                            <input id="chat-user-search-input" type="text" placeholder="键入名称..." class="form-control">
+                            <button id="chat-user-search" type="button" class="btn btn-primary btn-flat input-group-btn">搜索</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <!-- DIRECT CHAT DANGER -->
+                <div class="box box-danger direct-chat direct-chat-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">当前正在聊天：<span id="toChat"></span></h3>
+                    </div><!-- /.box-header -->
+                    <div id="chat-msg" class="box-body" style="height: calc(100vh - 220px);overflow-x: hidden;overflow-y: auto;">
+                        <!-- Conversations are loaded here -->
+                        <div class="direct-chat-messages">
+                            <!-- Message. Default to the left -->
+                            <div class="direct-chat-msg">
+                                <div class="direct-chat-info clearfix">
+                                    <span class="direct-chat-name pull-left">亚历山大·皮尔斯</span>
+                                    <span class="direct-chat-timestamp pull-right">1月23日下午2:00</span>
+                                </div><!-- /.direct-chat-info -->
+                                <img class="direct-chat-img" src="/static/img/user1-128x128.jpg"
+                                     alt="消息用户图像">
+                                <!-- /.direct-chat-img -->
+                                <div class="direct-chat-text">
+                                    这个模板真的免费吗？简直不可思议！
+                                </div><!-- /.direct-chat-text -->
+                            </div><!-- /.direct-chat-msg -->
+
+                            <!-- Message to the right -->
+                            <div class="direct-chat-msg right">
+                                <div class="direct-chat-info clearfix">
+                                    <span class="direct-chat-name pull-right">莎拉·布洛克（Sarah Bullock）</span>
+                                    <span class="direct-chat-timestamp pull-left">1月23日下午2:05</span>
+                                </div>
+                                <img class="direct-chat-img" src="/static/img/user3-128x128.jpg"
+                                     alt="消息用户图像">
+                                <div class="direct-chat-text">
+                                    你最好相信它！
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="box-footer">
+                        <form action="#" method="post">
+                            <div class="input-group">
+                                <input type="text" name="message" placeholder="键入消息..." class="form-control">
+                                <button type="button" class="btn btn-danger btn-flat input-group-btn">发送</button>
+                            </div>
+                        </form>
+                    </div><!-- /.box-footer-->
+                </div><!--/.direct-chat -->
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/chat/chat.js"></script>
+{{end}}

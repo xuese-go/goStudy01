@@ -67,6 +67,10 @@ func routers(r *gin.Engine) {
 		ind2.GET("/user/personal", func(context *gin.Context) {
 			context.HTML(http.StatusOK, "user/personal.html", nil)
 		})
+		//	聊天
+		ind2.GET("/chat", func(context *gin.Context) {
+			context.HTML(http.StatusOK, "chat/chat.html", nil)
+		})
 	}
 
 	//api路由
