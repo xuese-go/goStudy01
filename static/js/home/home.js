@@ -19,17 +19,23 @@ $(function () {
         },
         error: function (err) {
             console.log(err)
-            if (!err.responseJSON.success) {
-                if (err.responseJSON.data === 'logout') {
-                    alter2(4, err.responseJSON.msg)
-                    setTimeout(function () {
-                        window.location.href = window.origin + "/"
-                    }, 3000);
-                } else if (err.responseJSON.data === '!admin') {
-                    alter2(4, err.responseJSON.msg)
+            if (err.status === 200) {
+                if (!err.responseJSON.success) {
+                    if (err.responseJSON.data === 'logout') {
+                        alter2(4, err.responseJSON.msg)
+                        setTimeout(function () {
+                            window.location.href = window.origin + "/"
+                        }, 3000);
+                    } else if (err.responseJSON.data === '!admin') {
+                        alter2(4, err.responseJSON.msg)
+                    }
+                } else {
+                    console.log(err.responseJSON)
                 }
+            } else if (err.status === 404) {
+                alter2(4, "资源不存在")
             } else {
-                console.log(err.responseJSON)
+                alter2(4, "资源错误")
             }
         }
     });
