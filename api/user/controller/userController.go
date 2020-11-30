@@ -5,8 +5,8 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
-	"github.com/xuese-go/goStudy01/api/util/file"
-	"github.com/xuese-go/goStudy01/api/util/jwt"
+	"github.com/xuese-go/goStudy01/util/file"
+	"github.com/xuese-go/goStudy01/util/jwt"
 	"log"
 	"strconv"
 )

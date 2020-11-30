@@ -3,7 +3,7 @@ package controller
 import (
 	"github.com/gin-gonic/gin"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
-	"github.com/xuese-go/goStudy01/api/util/file"
+	"github.com/xuese-go/goStudy01/util/file"
 )
 
 /**

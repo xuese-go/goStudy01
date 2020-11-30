@@ -4,9 +4,9 @@ import (
 	uuid "github.com/satori/go.uuid"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/structs"
-	"github.com/xuese-go/goStudy01/api/util/md5"
-	util "github.com/xuese-go/goStudy01/api/util/page"
 	"github.com/xuese-go/goStudy01/db"
+	"github.com/xuese-go/goStudy01/util/md5"
+	util "github.com/xuese-go/goStudy01/util/page"
 	"log"
 	"time"
 )
