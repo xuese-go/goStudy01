@@ -4,6 +4,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 type Cfg struct {
@@ -23,7 +24,8 @@ type file struct {
 读取配置文件，并转成结构体
 */
 func (cfg *Cfg) getCfg() *error {
-	if c, err := ioutil.ReadFile("conf.yaml"); err != nil {
+	f, _ := os.Getwd()
+	if c, err := ioutil.ReadFile(f + "/conf.yaml"); err != nil {
 		log.Panicln(err.Error())
 		return &err
 	} else if err = yaml.Unmarshal(c, &cfg); err != nil {
