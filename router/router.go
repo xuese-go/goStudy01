@@ -9,7 +9,7 @@ import (
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/util/jwt"
-	"github.com/xuese-go/goStudy01/api/util/path"
+	"github.com/xuese-go/goStudy01/config"
 	"io"
 	"log"
 	"net/http"
@@ -42,7 +42,7 @@ func routers(r *gin.Engine) {
 	r.LoadHTMLGlob("views/**/*")
 	//静态文件路径
 	r.Static("/static", "static")
-	r.Static("/file", path.PATH)
+	r.Static("/file", config.C.File.Path)
 
 	//页面路由
 	index := r.Group("/")
@@ -124,8 +124,8 @@ func routers(r *gin.Engine) {
 func interceptToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//是否是登录
-		path := c.Request.URL.Path
-		if strings.Contains(path, "api/login/") {
+		p := c.Request.URL.Path
+		if strings.Contains(p, "api/login/") {
 			c.Next()
 		} else {
 			//	判断token
