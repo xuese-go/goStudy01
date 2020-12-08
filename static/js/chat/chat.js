@@ -35,8 +35,6 @@ function findUsers() {
         } else {
 
         }
-    }).fail(function (err) {
-
     })
 }
 

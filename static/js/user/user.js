@@ -23,8 +23,6 @@ $(function () {
             } else {
                 alter2(3, e.msg)
             }
-        }).fail(function (err) {
-
         })
     })
 //    修改
@@ -43,8 +41,6 @@ $(function () {
             } else {
                 alter2(3, e.msg)
             }
-        }).fail(function (err) {
-
         })
     })
 })
@@ -73,16 +69,16 @@ function page() {
                 $("#table-content").append(trs(i, o))
             })
             //    分页
-            $(e.page.pageData).each(function (i, o) {
-                let a = (o === pageNum ? 'active' : '')
-                let l = '<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
-                $("#table-page").append(l)
-            })
+            if (e.page !== undefined && e.page !== null) {
+                $(e.page.pageData).each(function (i, o) {
+                    let a = (o === pageNum ? 'active' : '')
+                    let l = '<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
+                    $("#table-page").append(l)
+                })
+            }
         } else {
 
         }
-    }).fail(function (err) {
-
     })
 }
 
@@ -121,8 +117,6 @@ function del(o) {
                 } else {
                     alter2(4, e.msg)
                 }
-            }).fail(function (err) {
-
             })
         }
     })
@@ -142,8 +136,6 @@ function one(e) {
         } else {
             alter2(3, e.msg)
         }
-    }).fail(function (err) {
-
     })
 }
 
@@ -158,7 +150,5 @@ function restPwd(e) {
         } else {
             alter2(3, e.msg)
         }
-    }).fail(function (err) {
-
     })
 }

@@ -66,11 +66,16 @@ func Page(ctx *gin.Context) {
 	pageSize := ctx.Query("pageSize")
 	acc := ctx.Query("jurName")
 
-	var jur structs.JurisdictionStruct
-	jur.JurName = acc
-	n, _ := strconv.Atoi(pageNum)
-	s, _ := strconv.Atoi(pageSize)
-	res := service.Page(n, s, jur)
-
-	resp.Respone(ctx, res)
+	if pageNum != "" && pageSize != "" && acc != "" {
+		var jur structs.JurisdictionStruct
+		jur.JurName = acc
+		n, _ := strconv.Atoi(pageNum)
+		s, _ := strconv.Atoi(pageSize)
+		res := service.Page(n, s, jur)
+		resp.Respone(ctx, res)
+	} else {
+		var jur structs.JurisdictionStruct
+		res := service.Page(-1, -1, jur)
+		resp.Respone(ctx, res)
+	}
 }

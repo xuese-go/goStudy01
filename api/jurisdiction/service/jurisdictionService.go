@@ -108,23 +108,29 @@ func Page(pageNum int, pageSize int, jur structs.JurisdictionStruct) resp.Respon
 	if jur.JurName != "" {
 		dba = dba.Where("jur_name like ?", "%"+jur.JurName+"%")
 	}
+
 	//总记录数
 	var count int
-	dba = dba.Find(&us).Count(&count)
-	if dba.Error != nil {
-		log.Println(dba.Error.Error())
-		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
-	}
-
-	//分页信息
 	if pageNum > 0 && pageSize > 0 {
+		dba = dba.Find(&us).Count(&count)
+		if dba.Error != nil {
+			log.Println(dba.Error.Error())
+			return resp.ResponeStruct{Success: false, Msg: "操作失败"}
+		}
+
+		//分页信息
 		dba = dba.Order("jur_name")
 		dba = dba.Offset((pageNum - 1) * pageSize).Limit(pageSize)
 	}
+
 	//查询
 	if err := dba.Table("jurisdiction_table").Select([]string{"uuid", "jur_name", "jur_flag"}).Scan(&us).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
-	return resp.ResponeStruct{Success: true, Data: us, Page: util.PageUtil(count, pageSize, pageNum)}
+	if pageNum > 0 && pageSize > 0 {
+		return resp.ResponeStruct{Success: true, Data: us, Page: util.PageUtil(count, pageSize, pageNum)}
+	} else {
+		return resp.ResponeStruct{Success: true, Data: us}
+	}
 }

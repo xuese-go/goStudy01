@@ -42,7 +42,5 @@ function getInfo() {
         } else {
             alter2(4, "个人信息获取失败")
         }
-    }).fail(function (err) {
-
     })
 }

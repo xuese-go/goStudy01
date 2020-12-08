@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/xuese-go/goStudy01/api/file/controller"
+	JurUserController "github.com/xuese-go/goStudy01/api/jurUser/controller"
 	JurController "github.com/xuese-go/goStudy01/api/jurisdiction/controller"
 	loginController "github.com/xuese-go/goStudy01/api/login/controller"
 	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
@@ -76,6 +77,10 @@ func routers(r *gin.Engine) {
 		ind2.GET("/jurisdiction", func(context *gin.Context) {
 			context.HTML(http.StatusOK, "jurisdiction/jurisdiction.html", nil)
 		})
+		//	用户权限管理
+		ind2.GET("/jurUser", func(context *gin.Context) {
+			context.HTML(http.StatusOK, "jurUser/jurUser.html", nil)
+		})
 	}
 
 	//api路由
@@ -111,6 +116,10 @@ func routers(r *gin.Engine) {
 		jurisdiction.PUT("/jurisdiction/:putId", isAdmin(), JurController.Update)
 		jurisdiction.GET("/jurisdiction/:getId", JurController.One)
 		jurisdiction.GET("/jurisdictions", isAdmin(), JurController.Page)
+		///jurUser
+		jurUser := apis.Group("/jurUser")
+		jurUser.PUT("/jurUser/:userId", isAdmin(), JurUserController.Update)
+		jurUser.GET("/jurUser/:userId", JurUserController.FindByUserId)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {
