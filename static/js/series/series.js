@@ -1,16 +1,16 @@
-var pageNum = 1;
-var pageSize = 8;
+var pageNum = 1
+var pageSize = 8
 $(function () {
-    //分页
+//分页
     page()
-    //查询
+//查询
     $("#form-search").bind("click", function () {
         page()
     })
-    //新增
+//新增
     $("#form-save").on("submit", function (ev) {
         ev.preventDefault();
-        $.ajax("/api/brand/brand", {
+        $.ajax("/api/series/series", {
             type: "POST",
             dataType: 'json',
             data: $('#form-save').serialize()
@@ -28,7 +28,7 @@ $(function () {
 //    修改
     $("#form-update").on("submit", function (ev) {
         ev.preventDefault();
-        $.ajax("/api/brand/brand/" + $("#uuid2").val(), {
+        $.ajax("/api/series/series/" + $("#uuid2").val(), {
             type: "PUT",
             dataType: 'json',
             data: $('#form-update').serialize()
@@ -55,7 +55,7 @@ function pageLabel(o) {
 function page() {
     $("#table-content").find("tr").remove()
     $("#table-page").find("li").remove()
-    $.ajax("/api/brand/brands", {
+    $.ajax("/api/series/seriess", {
         type: "GET",
         dataType: 'json',
         data: {
@@ -66,9 +66,9 @@ function page() {
     }).done(function (e) {
         if (e.success) {
             $(e.data).each(function (i, o) {
-                $("#table-content").append(trs(i, o))
+                trs(i, o)
             })
-            //    分页
+//    分页
             if (e.page !== undefined && e.page !== null) {
                 $(e.page.pageData).each(function (i, o) {
                     let a = (o === pageNum ? 'active' : '')
@@ -82,23 +82,25 @@ function page() {
 
 //tr模板
 function trs(i, e) {
-    return '<tr>'
-        + '<td>' + (i + 1) + '</td>'
-        + '<td>' + e.name + '</td>'
-        + '<td>'
-        + '<button type="button" class="btn btn-danger btn-xs" onclick="del(\'' + e.uuid + '\')">删除</button>'
-        + '&nbsp;&nbsp;'
-        + '<button type="button" class="btn btn-warning btn-xs" onclick="one(\'' + e.uuid + '\')"' +
-        ' data-toggle="modal" data-target="#modal-update">修改/查看</button>'
-        + '</td>'
-        + '</tr>'
+    $("#table-content").append("<tr>")
+    let tr = $('#table-content').find('tr:last');
+
+    $(tr).append("<td>")
+    $(tr).find('td:last').text(i + 1)
+
+    $(tr).append("<td>")
+    $(tr).find('td:last').text(e.name)
+
+    $(tr).append("<td>")
+    $(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-danger btn-xs\" onclick=\"del(\'" + e.uuid + "\')\">删除</button>")
+    $(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-warning btn-xs\" onclick=\"one(\'" + e.uuid + "\')\" data-toggle=\"modal\" data-target=\"#modal-update\">修改/查看</button>")
 }
 
 //删除
 function del(o) {
     alter2IsOk("是否确定删除？").then(function (e) {
         if (e.value) {
-            $.ajax("/api/brand/brand/" + o, {
+            $.ajax("/api/series/series/" + o, {
                 type: "DELETE",
                 dataType: 'json'
             }).done(function (e) {
@@ -114,7 +116,7 @@ function del(o) {
 
 //根据id获取
 function one(e) {
-    $.ajax("/api/brand/brand/" + e, {
+    $.ajax("/api/series/series/" + e, {
         type: "GET",
         dataType: 'json'
     }).done(function (e) {

@@ -5,5 +5,7 @@ import (
 )
 
 func TestCodeController(t *testing.T) {
-	AutoGenerationMod("brand", "商品类别")
+	datas := make([]string, 1)
+	datas[0] = "Name           string    `json:\"name\" form:\"name\"`"
+	AutoGenerationMod("series", "系列管理", datas)
 }

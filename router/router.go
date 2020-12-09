@@ -9,6 +9,7 @@ import (
 	loginController "github.com/xuese-go/goStudy01/api/login/controller"
 	noticeController "github.com/xuese-go/goStudy01/api/notice/controller"
 	"github.com/xuese-go/goStudy01/api/respone/structs"
+	seriesRouter "github.com/xuese-go/goStudy01/api/series/router"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/config"
@@ -84,6 +85,8 @@ func routers(r *gin.Engine) {
 		})
 		//	brand
 		brandRouter.BrandRouterHtml(ind2)
+		//	series
+		seriesRouter.SeriesRouterHtml(ind2)
 	}
 
 	//api路由
@@ -125,6 +128,8 @@ func routers(r *gin.Engine) {
 		jurUser.GET("/jurUser/:userId", JurUserController.FindByUserId)
 		//	brand
 		brandRouter.BrandRouter(apis)
+		//	series
+		seriesRouter.SeriesRouter(apis)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {

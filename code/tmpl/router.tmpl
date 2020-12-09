@@ -12,7 +12,7 @@ import (
 /**
 页面路由
 */
-func BrandRouterHtml(r *gin.RouterGroup){
+func {{.ModStruct}}RouterHtml(r *gin.RouterGroup){
 r.GET("/{{.ModPath}}", func(context *gin.Context) {
 context.HTML(http.StatusOK, "{{.ModPath}}/{{.ModPath}}.html", nil)
 })

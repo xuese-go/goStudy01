@@ -11,9 +11,9 @@ import (
 /**
 生成模块代码
 */
-func AutoGenerationMod(mod string, modCN string) {
+func AutoGenerationMod(mod string, modCN string, datas []string) {
 	//	go
-	autoGenerationGo(mod, modCN)
+	autoGenerationGo(mod, modCN, datas)
 	//	html
 	autoGenerationHtml(mod, modCN)
 	//	js
@@ -89,21 +89,21 @@ func codeUtilHtml(category string, mod string, modCN string) {
 /**
 自动生成go基本文件和代码
 */
-func autoGenerationGo(mod string, modCN string) {
+func autoGenerationGo(mod string, modCN string, datas []string) {
 	//router
-	codeUtilGo("router", mod, "")
+	codeUtilGo("router", mod, "", nil)
 	//structs
-	codeUtilGo("structs", mod, modCN)
+	codeUtilGo("structs", mod, modCN, datas)
 	//service
-	codeUtilGo("service", mod, "")
+	codeUtilGo("service", mod, "", nil)
 	//controller
-	codeUtilGo("controller", mod, "")
+	codeUtilGo("controller", mod, "", nil)
 }
 
 /**
 工具类go
 */
-func codeUtilGo(category string, mod string, modCN string) {
+func codeUtilGo(category string, mod string, modCN string, datas []string) {
 	if tem, err := template.ParseFiles("./../tmpl/" + category + ".tmpl"); err != nil {
 		fmt.Println("读取模板文件错误")
 	} else {

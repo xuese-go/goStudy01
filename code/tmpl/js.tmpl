@@ -1,5 +1,5 @@
-let pageNum = 1
-let pageSize = 8
+var pageNum = 1
+var pageSize = 8
 $(function () {
 //分页
 page()
@@ -72,8 +72,7 @@ $("#table-content").append(trs(i, o))
 if (e.page !== undefined && e.page !== null) {
 $(e.page.pageData).each(function (i, o) {
 let a = (o === pageNum ? 'active' : '')
-let l = '
-<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
+let l ='&lt;li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"&gt;&lt;a class="page-link" href="#">' + o + '&lt;/a&gt;&lt;/li&gt;'
 $("#table-page").append(l)
 })
 }
@@ -83,32 +82,18 @@ $("#table-page").append(l)
 
 //tr模板
 function trs(i, e) {
-return '
-<tr>'
-    + '
-    <td>' + (i + 1) + '</td>
-    '
-    //+ '
-    //<td>' + e.jurName + '</td>
-    '
-    //+ '
-    //<td>' + e.jurFlag + '</td>
-    '
-    + '
-    <td>'
-        + '
-        <button type="button" class="btn btn-danger btn-xs" onclick="del(\'' + e.uuid + '\')">删除</button>
-        '
-        + '&nbsp;&nbsp;'
-        + '
-        <button type="button" class="btn btn-warning btn-xs" onclick="one(\'' + e.uuid + '\')"
-        ' +
-        ' data-toggle="modal" data-target="#modal-update">修改/查看</button>'
-        + '
-    </td>
-    '
-    + '
-</tr>'
+$("#table-content").append("&lt;tr&gt;")
+let tr = $('#table-content').find('tr:last');
+
+$(tr).append("&lt;td&gt;")
+$(tr).find('td:last').text(i + 1)
+
+//$(tr).append("&lt;td&gt;")
+//$(tr).find('td:last').text(e.name)
+
+$(tr).append("&lt;td&gt;")
+$(tr).find('td:last').append("&nbsp;&nbsp;&lt;button type=\"button\" class=\"btn btn-danger btn-xs\" onclick=\"del(\'" + e.uuid + "\')\"&gt;删除&lt;/button&gt;")
+$(tr).find('td:last').append("&nbsp;&nbsp;&lt;button type=\"button\" class=\"btn btn-warning btn-xs\" onclick=\"one(\'" + e.uuid + "\')\" data-toggle=\"modal\" data-target=\"#modal-update\"&gt;修改/查看&lt;/button&gt;")
 }
 
 //删除

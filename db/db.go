@@ -5,6 +5,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	brandStructs "github.com/xuese-go/goStudy01/api/brand/structs"
 	jurisdictionStructs "github.com/xuese-go/goStudy01/api/jurisdiction/structs"
+	seriesStructs "github.com/xuese-go/goStudy01/api/series/structs"
 	userStructs "github.com/xuese-go/goStudy01/api/user/structs"
 	"github.com/xuese-go/goStudy01/config"
 	"log"
@@ -27,6 +28,7 @@ func init() {
 		tables = append(tables, &userStructs.UserStruct{})
 		tables = append(tables, &jurisdictionStructs.JurisdictionStruct{})
 		tables = append(tables, &brandStructs.BrandStructs{})
+		tables = append(tables, &seriesStructs.SeriesStructs{})
 
 		for k := range tables {
 			Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(tables[k])
