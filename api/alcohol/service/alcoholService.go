@@ -1,8 +1,11 @@
+/**
+
+ */
 package service
 
 import (
 	uuid "github.com/satori/go.uuid"
-	"github.com/xuese-go/goStudy01/api/brand/structs"
+	"github.com/xuese-go/goStudy01/api/alcohol/structs"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/db"
 	util "github.com/xuese-go/goStudy01/util/page"
@@ -13,12 +16,12 @@ import (
 /**
 新增
 */
-func Save(mod structs.BrandStructs) resp.ResponeStruct {
+func Save(mod structs.AlcoholStructs) resp.ResponeStruct {
 	dba := db.Db
 	tx := dba.Begin()
 
 	//查询是否有重复
-	var u structs.BrandStructs
+	var u structs.AlcoholStructs
 	_ = dba.First(&u, "name = ?", mod.Name)
 	if u.Uuid != "" {
 		return resp.ResponeStruct{Success: false, Msg: "重复"}
@@ -45,7 +48,7 @@ func Save(mod structs.BrandStructs) resp.ResponeStruct {
 func DeleteById(uuid string) resp.ResponeStruct {
 	dba := db.Db
 	tx := dba.Begin()
-	var u structs.BrandStructs
+	var u structs.AlcoholStructs
 	if err := tx.First(&u, "uuid = ?", uuid).Delete(&u).Error; err != nil {
 		log.Println(err.Error())
 		tx.Rollback()
@@ -58,19 +61,16 @@ func DeleteById(uuid string) resp.ResponeStruct {
 /**
 修改
 */
-func Update(mod structs.BrandStructs) resp.ResponeStruct {
+func Update(mod structs.AlcoholStructs) resp.ResponeStruct {
 	dba := db.Db
 	tx := dba.Begin()
-	var u structs.BrandStructs
+	var u structs.AlcoholStructs
 	if err := dba.First(&u, "uuid = ?", mod.Uuid).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
 	}
 
 	// 需要修改的字段
-	if mod.Name != "" {
-		u.Name = mod.Name
-	}
 
 	u.LastUpdateTime = time.Now()
 	t := tx.Save(&u)
@@ -88,7 +88,7 @@ func Update(mod structs.BrandStructs) resp.ResponeStruct {
 */
 func One(uuid string) resp.ResponeStruct {
 	dba := db.Db
-	var u structs.BrandStructs
+	var u structs.AlcoholStructs
 	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
@@ -99,10 +99,10 @@ func One(uuid string) resp.ResponeStruct {
 /**
 分页查询
 */
-func Page(pageNum int, pageSize int, mod structs.BrandStructs) resp.ResponeStruct {
+func Page(pageNum int, pageSize int, mod structs.AlcoholStructs) resp.ResponeStruct {
 	//为了不影响后边的操作  所以需要使用新的变量
 	dba := db.Db
-	us := make([]structs.BrandStructs, 0)
+	us := make([]structs.AlcoholStructs, 0)
 
 	//查询条件
 	if mod.Name != "" {
@@ -124,7 +124,7 @@ func Page(pageNum int, pageSize int, mod structs.BrandStructs) resp.ResponeStruc
 	}
 
 	//查询
-	if err := dba.Table("brand_table").Select([]string{"uuid", "name"}).Scan(&us).Error; err != nil {
+	if err := dba.Table("alcohol_table").Select([]string{"uuid", "name", "brand_id", "series_id", "concentration"}).Scan(&us).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}

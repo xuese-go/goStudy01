@@ -22,7 +22,7 @@ func Save(mod structs.SeriesStructs) resp.ResponeStruct {
 
 	//查询是否有重复
 	var u structs.SeriesStructs
-	_ = dba.First(&u, "name = ?", u.Name)
+	_ = dba.First(&u, "name = ?", mod.Name)
 	if u.Uuid != "" {
 		return resp.ResponeStruct{Success: false, Msg: "重复"}
 	}

@@ -118,6 +118,9 @@ func codeUtilGo(category string, mod string, modCN string, datas []string) {
 		c.ModStruct = strings.Title(mod)
 		c.ControllerName = mod + category2
 		c.ModChina = modCN
+		if datas != nil {
+			c.Datas = datas
+		}
 		if err = tem.Execute(f, c); err != nil {
 			fmt.Println(err)
 		} else {

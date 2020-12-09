@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	alcoholRouter "github.com/xuese-go/goStudy01/api/alcohol/router"
 	brandRouter "github.com/xuese-go/goStudy01/api/brand/router"
 	"github.com/xuese-go/goStudy01/api/file/controller"
 	JurUserController "github.com/xuese-go/goStudy01/api/jurUser/controller"
@@ -87,6 +88,8 @@ func routers(r *gin.Engine) {
 		brandRouter.BrandRouterHtml(ind2)
 		//	series
 		seriesRouter.SeriesRouterHtml(ind2)
+		//	alcohol
+		alcoholRouter.AlcoholRouterHtml(ind2)
 	}
 
 	//api路由
@@ -130,6 +133,8 @@ func routers(r *gin.Engine) {
 		brandRouter.BrandRouter(apis)
 		//	series
 		seriesRouter.SeriesRouter(apis)
+		//	alcohol
+		alcoholRouter.AlcoholRouter(apis)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {

@@ -6,6 +6,8 @@ type CodeStructs struct {
 	ModPath string
 	//	结构体名
 	ModStruct string
+	//	结构体字段
+	Datas []string
 	//	controller文件名
 	ControllerName string
 	//	html中文标题
