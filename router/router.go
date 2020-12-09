@@ -28,7 +28,7 @@ func init() {
 	r := gin.Default()
 
 	//日志
-	file, _ := os.Create("goStudy01.log")
+	file, _ := os.OpenFile("goStudy01.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0)
 	gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
 
 	// 路由

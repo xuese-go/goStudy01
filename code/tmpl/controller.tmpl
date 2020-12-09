@@ -1,3 +1,6 @@
+/**
+{{.ModChina}}
+*/
 package controller
 
 import (
@@ -64,8 +67,10 @@ resp.Respone(ctx, respond)
 func Page(ctx *gin.Context) {
 pageNum := ctx.Query("pageNum")
 pageSize := ctx.Query("pageSize")
+//name := ctx.Query("name")
 
 var mod structs.{{.ModStruct}}Structs
+//mod.Name = name
 n, _ := strconv.Atoi(pageNum)
 s, _ := strconv.Atoi(pageSize)
 res := service.Page(n, s, mod)

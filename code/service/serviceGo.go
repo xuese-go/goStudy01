@@ -13,7 +13,7 @@ import (
 */
 func AutoGenerationMod(mod string, modCN string) {
 	//	go
-	autoGenerationGo(mod)
+	autoGenerationGo(mod, modCN)
 	//	html
 	autoGenerationHtml(mod, modCN)
 	//	js
@@ -89,21 +89,21 @@ func codeUtilHtml(category string, mod string, modCN string) {
 /**
 自动生成go基本文件和代码
 */
-func autoGenerationGo(mod string) {
+func autoGenerationGo(mod string, modCN string) {
 	//router
-	codeUtilGo("router", mod)
+	codeUtilGo("router", mod, "")
 	//structs
-	codeUtilGo("structs", mod)
+	codeUtilGo("structs", mod, modCN)
 	//service
-	codeUtilGo("service", mod)
+	codeUtilGo("service", mod, "")
 	//controller
-	codeUtilGo("controller", mod)
+	codeUtilGo("controller", mod, "")
 }
 
 /**
 工具类go
 */
-func codeUtilGo(category string, mod string) {
+func codeUtilGo(category string, mod string, modCN string) {
 	if tem, err := template.ParseFiles("./../tmpl/" + category + ".tmpl"); err != nil {
 		fmt.Println("读取模板文件错误")
 	} else {
@@ -117,6 +117,7 @@ func codeUtilGo(category string, mod string) {
 		c.ModPath = mod
 		c.ModStruct = strings.Title(mod)
 		c.ControllerName = mod + category2
+		c.ModChina = modCN
 		if err = tem.Execute(f, c); err != nil {
 			fmt.Println(err)
 		} else {

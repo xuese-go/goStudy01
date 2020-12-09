@@ -1,19 +1,19 @@
+/**
+{{.ModChina}}
+*/
 package structs
 
 import (
-	"time"
+"time"
 )
 
-/*
-
-*/
 type {{.ModStruct}}Structs struct {
-	Uuid           string    `json:"uuid" gorm:"primary_key"`               //gorm:"primary_key"声明为主键
-	CreateTime     time.Time `json:"createTime" form:"createTime"`
-	LastUpdateTime time.Time `json:"lastUpdateTime" form:"lastUpdateTime"` //最后修改时间
+Uuid           string    `json:"uuid" gorm:"primary_key"`               //gorm:"primary_key"声明为主键
+CreateTime     time.Time `json:"createTime" form:"createTime"`
+LastUpdateTime time.Time `json:"lastUpdateTime" form:"lastUpdateTime"` //最后修改时间
 }
 
 //更改表名称
 func ({{.ModStruct}}Structs) TableName() string {
-	return "{{.ModPath}}_table"
+return "{{.ModPath}}_table"
 }
