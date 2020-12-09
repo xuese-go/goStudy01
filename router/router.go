@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	brandRouter "github.com/xuese-go/goStudy01/api/brand/router"
 	"github.com/xuese-go/goStudy01/api/file/controller"
 	JurUserController "github.com/xuese-go/goStudy01/api/jurUser/controller"
 	JurController "github.com/xuese-go/goStudy01/api/jurisdiction/controller"
@@ -81,6 +82,8 @@ func routers(r *gin.Engine) {
 		ind2.GET("/jurUser", func(context *gin.Context) {
 			context.HTML(http.StatusOK, "jurUser/jurUser.html", nil)
 		})
+		//	brand
+		brandRouter.BrandRouterHtml(ind2)
 	}
 
 	//api路由
@@ -120,6 +123,8 @@ func routers(r *gin.Engine) {
 		jurUser := apis.Group("/jurUser")
 		jurUser.PUT("/jurUser/:userId", isAdmin(), JurUserController.Update)
 		jurUser.GET("/jurUser/:userId", JurUserController.FindByUserId)
+		//	brand
+		brandRouter.BrandRouter(apis)
 	}
 
 	// r.GET("/ping/:a/:b", func(c *gin.Context) {

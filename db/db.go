@@ -3,6 +3,7 @@ package db
 import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	brandStructs "github.com/xuese-go/goStudy01/api/brand/structs"
 	jurisdictionStructs "github.com/xuese-go/goStudy01/api/jurisdiction/structs"
 	userStructs "github.com/xuese-go/goStudy01/api/user/structs"
 	"github.com/xuese-go/goStudy01/config"
@@ -25,6 +26,7 @@ func init() {
 		tables := make([]interface{}, 0)
 		tables = append(tables, &userStructs.UserStruct{})
 		tables = append(tables, &jurisdictionStructs.JurisdictionStruct{})
+		tables = append(tables, &brandStructs.BrandStructs{})
 
 		for k := range tables {
 			Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(tables[k])

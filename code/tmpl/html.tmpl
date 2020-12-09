@@ -1,0 +1,138 @@
+{{.Top}}
+<!-- Main content -->
+<div class="content">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{{.ModChina}}</h3>
+            <div class="card-tools">
+                <div style="float: left">
+                    <button type="button"
+                            class="btn btn-success btn-xs"
+                            style="height: 31px"
+                            data-toggle="modal"
+                            data-target="#modal-save"
+                            id="btn-to-save"
+                    >新增
+                    </button>
+                </div>
+                <div style="float: left">
+                    <div class="input-group input-group-sm" style="width: 150px;margin-top:0">
+                        <input type="text" id="table_search" class="form-control float-right"
+                               placeholder="Search">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-default" id="form-search">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th style="width: 10px">#</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody id="table-content">
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer clearfix">
+            <ul class="pagination pagination-sm m-0 float-right" id="table-page">
+                <li class="page-item"><a class="page-link" href="#"></a></li>
+            </ul>
+        </div>
+        <!-- /.card-footer-->
+    </div>
+</div>
+
+<div class="modal fade" id="modal-save">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">新增</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="form-save">
+                    <div class="card-body">
+                        <!--<div class="form-group">
+                            <label for="jurFlag">权限标记</label>
+                            <input type="text"
+                                   name="jurFlag"
+                                   class="form-control"
+                                   id="jurFlag"
+                                   required
+                                   minlength="2"
+                                   maxlength="30"
+                                   placeholder="权限标记">
+                        </div>-->
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-block btn-primary">确定</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="modal fade" id="modal-update">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">修改</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="form-update">
+                    <div class="card-body">
+                        <input type="hidden" name="uuid" id="uuid2">
+                        <!--内容-->
+                        <!--<div class="form-group">
+                            <label for="jurFlag2">权限标记</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="jurFlag2"
+                                   name="jurFlag"
+                                   minlength="2"
+                                   maxlength="30"
+                                   placeholder="权限标记">
+                        </div>-->
+                    </div>
+                    <!-- /.card-body -->
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-block btn-primary">确定</button>
+                        <button type="button"
+                                style="display: none"
+                                data-toggle="modal"
+                                data-target="#modal-update"
+                                id="btn-to-update"
+                        ></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- /.content -->
+<script src="/static/js/{{.ModPath}}/{{.ModPath}}.js"></script>
+{{.Ends}}
