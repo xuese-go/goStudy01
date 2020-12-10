@@ -20,9 +20,12 @@ $(function () {
         error: function (err) {
             console.log(err)
             if (err.status === 200) {
-                if (!err.responseJSON.success) {
+            } else if (err.status === 404) {
+                alter2(4, "资源不存在")
+            } else {
+                if (err.responseJSON.success !== undefined && !err.responseJSON.success) {
                     if (err.responseJSON.data === 'logout') {
-                        alter2(4, err.responseJSON.msg)
+                        alter2(4, err.responseJSON.msg + "3秒后跳转登录页")
                         setTimeout(function () {
                             window.location.href = window.origin + "/"
                         }, 3000);
@@ -30,12 +33,8 @@ $(function () {
                         alter2(4, err.responseJSON.msg)
                     }
                 } else {
-                    console.log(err.responseJSON)
+                    alter2(4, "资源错误")
                 }
-            } else if (err.status === 404) {
-                alter2(4, "资源不存在")
-            } else {
-                alter2(4, "资源错误")
             }
         }
     });

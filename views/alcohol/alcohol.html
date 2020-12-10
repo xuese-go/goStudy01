@@ -81,25 +81,19 @@
                             </div>
                             <div class="form-group">
                                 <label for="brandId">品牌</label>
-                                <input type="text"
-                                       name="brandId"
-                                       class="form-control"
-                                       id="brandId"
-                                       required
-                                       minlength="1"
-                                       maxlength="30"
-                                       placeholder="品牌">
+                                <select name="brandId"
+                                        class="form-control"
+                                        id="brandId"
+                                        required>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="seriesId">系列</label>
-                                <input type="text"
-                                       name="seriesId"
-                                       class="form-control"
-                                       id="seriesId"
-                                       required
-                                       minlength="1"
-                                       maxlength="30"
-                                       placeholder="系列">
+                                <select name="seriesId"
+                                        class="form-control"
+                                        id="seriesId"
+                                        required>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="concentration">酒精浓度</label>
@@ -142,16 +136,45 @@
                         <div class="card-body">
                             <input type="hidden" name="uuid" id="uuid2">
                             <!--此处添加自定义字段-->
-                            <!--<div class="form-group">
-                                <label for="jurFlag2">权限标记</label>
+                            <div class="form-group">
+                                <label for="name2">名称</label>
                                 <input type="text"
+                                       name="name"
                                        class="form-control"
-                                       id="jurFlag2"
-                                       name="jurFlag"
-                                       minlength="2"
+                                       id="name2"
+                                       required
+                                       minlength="1"
                                        maxlength="30"
-                                       placeholder="权限标记">
-                            </div>-->
+                                       placeholder="名称">
+                            </div>
+                            <div class="form-group">
+                                <label for="brandId2">品牌</label>
+                                <select name="brandId"
+                                        class="form-control"
+                                        id="brandId2"
+                                        required>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="seriesId2">系列</label>
+                                <select name="seriesId"
+                                        class="form-control"
+                                        id="seriesId2"
+                                        required>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="concentration2">酒精浓度</label>
+                                <input type="number"
+                                       name="concentration"
+                                       class="form-control"
+                                       id="concentration2"
+                                       required
+                                       min="1.0"
+                                       max="99.9"
+                                       step="0.1"
+                                       placeholder="酒精浓度">
+                            </div>
                         </div>
                         <!-- /.card-body -->
 

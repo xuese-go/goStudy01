@@ -67,10 +67,10 @@ func One(ctx *gin.Context) {
 func Page(ctx *gin.Context) {
 	pageNum := ctx.Query("pageNum")
 	pageSize := ctx.Query("pageSize")
-	//name := ctx.Query("name")
+	name := ctx.Query("name")
 
 	var mod structs.AlcoholStructs
-	//mod.Name = name
+	mod.Name = name
 	n, _ := strconv.Atoi(pageNum)
 	s, _ := strconv.Atoi(pageSize)
 	res := service.Page(n, s, mod)

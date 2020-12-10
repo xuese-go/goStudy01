@@ -171,21 +171,21 @@ func interceptToken() gin.HandlerFunc {
 				//获取token中的信息
 				if claims, err := jwt.ParseToken(token); err != nil {
 					c.Abort()
-					c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌解析失败", Data: "logout"})
+					c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "令牌解析失败", Data: "logout"})
 					return
 				} else {
 					//判断令牌合法性
 					if jwt.IsToken(token) {
 						//	令牌非法或过期
 						c.Abort()
-						c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌过期，请从新登录", Data: "logout"})
+						c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "令牌过期，请从新登录", Data: "logout"})
 						return
 					} else {
 						//确认账号状态
 						r := service.IsState(claims.Uuid)
 						if r.Success {
 							c.Abort()
-							c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号已被停用或删除", Data: "logout"})
+							c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "该账号已被停用或删除", Data: "logout"})
 							return
 						} else {
 							c.Next() //写不写 都会执行
@@ -194,7 +194,7 @@ func interceptToken() gin.HandlerFunc {
 				}
 			} else {
 				c.Abort()
-				c.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+				c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
 				return
 			}
 		}
@@ -207,12 +207,12 @@ func isAdmin() gin.HandlerFunc {
 		token := context.Request.Header.Get("xueSeToken")
 		if claims, err := jwt.ParseToken(token); err != nil {
 			context.Abort()
-			context.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+			context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "令牌解析错误"})
 		} else {
 			r := service.IsRole(claims.Uuid)
 			if !r.Success {
 				context.Abort()
-				context.JSON(http.StatusUnauthorized, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})
+				context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})
 			}
 		}
 	}

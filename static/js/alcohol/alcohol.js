@@ -3,6 +3,10 @@ var pageSize = 8
 $(function () {
 //分页
     page()
+//    加载所有品牌
+    loadBrand()
+//    加载所有系列
+    loadSeries()
 //查询
     $("#form-search").bind("click", function () {
         page()
@@ -129,8 +133,52 @@ function one(e) {
         if (e.success) {
             $("#uuid2").val(e.data.uuid)
             $("#name2").val(e.data.name)
+            $("#brandId2").val(e.data.brandId)
+            $("#seriesId2").val(e.data.seriesId)
+            $("#concentration2").val(e.data.concentration)
         } else {
             alter2(3, e.msg)
+        }
+    })
+}
+
+//加载所有品牌
+function loadBrand() {
+    $("#brandId").find("option").remove()
+    $("#brandId2").find("option").remove()
+    $.ajax("/api/brand/brands", {
+        type: "GET",
+        dataType: 'json',
+        data: {
+            "pageNum": pageNum,
+            "pageSize": pageSize,
+        }
+    }).done(function (e) {
+        if (e.success) {
+            $(e.data).each(function (i, o) {
+                $("#brandId").append("<option value='" + o.uuid + "'>" + o.name + "</option>>")
+                $("#brandId2").append("<option value='" + o.uuid + "'>" + o.name + "</option>>")
+            })
+        }
+    })
+}
+//加载所有系列
+function loadSeries() {
+    $("#seriesId").find("option").remove()
+    $("#seriesId2").find("option").remove()
+    $.ajax("/api/series/seriess", {
+        type: "GET",
+        dataType: 'json',
+        data: {
+            "pageNum": pageNum,
+            "pageSize": pageSize,
+        }
+    }).done(function (e) {
+        if (e.success) {
+            $(e.data).each(function (i, o) {
+                $("#seriesId").append("<option value='" + o.uuid + "'>" + o.name + "</option>>")
+                $("#seriesId2").append("<option value='" + o.uuid + "'>" + o.name + "</option>>")
+            })
         }
     })
 }

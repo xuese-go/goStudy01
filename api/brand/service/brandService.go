@@ -129,6 +129,7 @@ func Page(pageNum int, pageSize int, mod structs.BrandStructs) resp.ResponeStruc
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
 	if pageNum > 0 && pageSize > 0 {
+
 		return resp.ResponeStruct{Success: true, Data: us, Page: util.PageUtil(count, pageSize, pageNum)}
 	} else {
 		return resp.ResponeStruct{Success: true, Data: us}

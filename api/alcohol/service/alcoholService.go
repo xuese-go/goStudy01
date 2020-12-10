@@ -71,6 +71,18 @@ func Update(mod structs.AlcoholStructs) resp.ResponeStruct {
 	}
 
 	// 需要修改的字段
+	if mod.Name != "" {
+		u.Name = mod.Name
+	}
+	if mod.BrandId != "" {
+		u.BrandId = mod.BrandId
+	}
+	if mod.SeriesId != "" {
+		u.SeriesId = mod.SeriesId
+	}
+	if mod.Concentration > 0 {
+		u.Concentration = mod.Concentration
+	}
 
 	u.LastUpdateTime = time.Now()
 	t := tx.Save(&u)
@@ -106,7 +118,7 @@ func Page(pageNum int, pageSize int, mod structs.AlcoholStructs) resp.ResponeStr
 
 	//查询条件
 	if mod.Name != "" {
-		dba = dba.Where("name like ?", "%"+mod.Name+"%")
+		dba = dba.Where("alcohol_table.name like ?", "%"+mod.Name+"%")
 	}
 
 	//总记录数
@@ -119,12 +131,16 @@ func Page(pageNum int, pageSize int, mod structs.AlcoholStructs) resp.ResponeStr
 		}
 
 		//分页信息
-		dba = dba.Order("name")
+		dba = dba.Order("alcohol_table.name")
 		dba = dba.Offset((pageNum - 1) * pageSize).Limit(pageSize)
 	}
 
 	//查询
-	if err := dba.Table("alcohol_table").Select([]string{"uuid", "name", "brand_id", "series_id", "concentration"}).Scan(&us).Error; err != nil {
+	dba = dba.Table("alcohol_table")
+	dba = dba.Select([]string{"alcohol_table.uuid", "alcohol_table.name", "brand_table.name as brand_id", "series_table.name as series_id", "concentration"})
+	dba = dba.Joins("join brand_table on brand_table.uuid = alcohol_table.brand_id")
+	dba = dba.Joins("join series_table on series_table.uuid = alcohol_table.series_id")
+	if err := dba.Scan(&us).Error; err != nil {
 		log.Println(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
