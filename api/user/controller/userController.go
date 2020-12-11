@@ -62,11 +62,11 @@ func Update(ctx *gin.Context) {
 */
 func UpdateImg(context *gin.Context) {
 	token := context.Request.Header.Get("xueSeToken")
-	if claims, err := jwt.ParseToken(token); err != nil {
-		resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+	if b, t := jwt.ParseToken(token); !b {
+		resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
 	} else {
 		if str := file.Up(context); str != "" {
-			respond := service.UpdateImg(str, claims.Uuid)
+			respond := service.UpdateImg(str, t.Issuer)
 			resp.Respone(context, respond)
 		} else {
 			resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "上传失败"})
@@ -106,10 +106,10 @@ func One(ctx *gin.Context) {
 */
 func Info(ctx *gin.Context) {
 	token := ctx.Request.Header.Get("xueSeToken")
-	if claims, err := jwt.ParseToken(token); err != nil {
-		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+	if b, t := jwt.ParseToken(token); !b {
+		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
 	} else {
-		respond := service.One(claims.Uuid)
+		respond := service.One(t.Issuer)
 		resp.Respone(ctx, respond)
 	}
 }

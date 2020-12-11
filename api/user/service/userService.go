@@ -31,7 +31,7 @@ func Save(user structs.UserStruct) resp.ResponeStruct {
 	user.Role = 1
 	user.State = 1
 	//密码加密处理
-	user.Password = md5.Enc(user.Password)
+	user.Password = md5.Enc(user.Password, user.Account)
 
 	//新增数据
 	t := tx.Create(user)
@@ -81,9 +81,9 @@ func Update(user structs.UserStruct) resp.ResponeStruct {
 		//重置密码
 		if user.Password == "rest" {
 			//密码加密处理
-			u.Password = md5.Enc("111111")
+			u.Password = md5.Enc("111111", u.Account)
 		} else {
-			u.Password = md5.Enc(user.Password)
+			u.Password = md5.Enc(user.Password, u.Account)
 		}
 	}
 	u.LastUpdateTime = time.Now()

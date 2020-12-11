@@ -8,8 +8,8 @@ import (
 /**
 加密
 */
-func Enc(str string) string {
-	data := []byte(str)
+func Enc(str string, str2 string) string {
+	data := []byte(str + str2)
 	has := md5.Sum(data)
 	md5str := fmt.Sprintf("%x", has) //将[]byte转成16进制
 	return md5str

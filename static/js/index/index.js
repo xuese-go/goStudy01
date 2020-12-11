@@ -8,15 +8,15 @@ $(function () {
             data: $('#login-form').serialize()
         }).done(function (e) {
             if (e.success) {
-                window.localStorage.setItem("xueSeToken", e.data);
-                if (window.localStorage.getItem("xueSeToken")) {
+                sessionStorage.setItem("xueSeToken", e.data);
+                if (sessionStorage.getItem("xueSeToken")) {
                     window.location.href = window.origin + "/page/home"
                 }
             } else {
                 $("#msg").text(e.msg)
             }
         }).fail(function (err) {
-            $("#msg").text("系统错误")
+            $("#msg").text("账号或密码错误")
         })
     })
 })

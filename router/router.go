@@ -14,7 +14,9 @@ import (
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/config"
+	"github.com/xuese-go/goStudy01/util/ip"
 	"github.com/xuese-go/goStudy01/util/jwt"
+	"github.com/xuese-go/goStudy01/util/md5"
 	"io"
 	"log"
 	"net/http"
@@ -168,34 +170,27 @@ func interceptToken() gin.HandlerFunc {
 			token := c.Request.Header.Get("xueSeToken")
 			log.Println("token:", token)
 			if token != "" {
-				//获取token中的信息
-				if claims, err := jwt.ParseToken(token); err != nil {
-					c.Abort()
-					c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "令牌解析失败", Data: "logout"})
-					return
-				} else {
-					//判断令牌合法性
-					if jwt.IsToken(token) {
-						//	令牌非法或过期
-						c.Abort()
-						c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "令牌过期，请从新登录", Data: "logout"})
-						return
+				//令牌合法性验证
+				if b, t := jwt.ParseToken(token); b {
+					//获取用户ip
+					ip2 := ip.GetIp(c)
+					//是否与签发ip一致
+					if t.Subject == md5.Enc(ip2, "逗你玩!!!") {
+						t2, _ := jwt.GenerateToken(t.Issuer, ip2)
+						c.Header("token", t2)
+						c.Header("ttt", "123")
+						c.Next()
 					} else {
-						//确认账号状态
-						r := service.IsState(claims.Uuid)
-						if r.Success {
-							c.Abort()
-							c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "该账号已被停用或删除", Data: "logout"})
-							return
-						} else {
-							c.Next() //写不写 都会执行
-						}
+						c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+						c.Abort()
 					}
+				} else {
+					c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+					c.Abort()
 				}
 			} else {
-				c.Abort()
 				c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
-				return
+				c.Abort()
 			}
 		}
 	}
@@ -205,11 +200,11 @@ func interceptToken() gin.HandlerFunc {
 func isAdmin() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		token := context.Request.Header.Get("xueSeToken")
-		if claims, err := jwt.ParseToken(token); err != nil {
+		if b, t := jwt.ParseToken(token); !b {
 			context.Abort()
-			context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "令牌解析错误"})
+			context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
 		} else {
-			r := service.IsRole(claims.Uuid)
+			r := service.IsRole(t.Issuer)
 			if !r.Success {
 				context.Abort()
 				context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})

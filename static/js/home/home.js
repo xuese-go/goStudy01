@@ -1,7 +1,7 @@
-var t;
+// var t;
 var Toast;
 $(function () {
-    t = window.localStorage.getItem("xueSeToken")
+    let t = sessionStorage.getItem("xueSeToken")
     if (!t) {
         window.location.href = window.origin + "/"
     }
@@ -15,7 +15,14 @@ $(function () {
         timeout: 2000,
         dataType: "json",
         beforeSend: function (request) {
-            request.setRequestHeader("xueSeToken", t);
+            request.setRequestHeader("xueSeToken", sessionStorage.getItem("xueSeToken"));
+        },
+        success: function (response, status, xhr) {
+            //响应头部
+            let to = xhr.getResponseHeader("token")
+            if (to != null) {
+                sessionStorage.setItem("xueSeToken", to);
+            }
         },
         error: function (err) {
             console.log(err)
@@ -47,7 +54,7 @@ $(function () {
 
     //注销登录
     $("#logout").click(function () {
-        window.localStorage.clear()
+        sessionStorage.clear()
         window.location.href = window.origin + "/"
     })
 
