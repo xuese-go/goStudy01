@@ -1,3 +1,6 @@
+/**
+整体路由
+*/
 package router
 
 import (
@@ -22,7 +25,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 )
 
 /*
@@ -179,7 +181,6 @@ func interceptToken() gin.HandlerFunc {
 					if t.Subject == md5.Enc(ip2, "逗你玩!!!") {
 						t2, _ := jwt.GenerateToken(t.Issuer, ip2)
 						c.Header("token", t2)
-						c.Header("ttt", "123")
 						c.Next()
 					} else {
 						c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
@@ -209,70 +210,6 @@ func isAdmin() gin.HandlerFunc {
 			if !r.Success {
 				context.Abort()
 				context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "该账号不是管理员", Data: "!admin"})
-			}
-		}
-	}
-}
-
-var restricts = make(map[string]restriction, 0)
-
-type restriction struct {
-	//	请求地址
-	p string
-	//	请求ip
-	i string
-	//	请求时间
-	t int64
-}
-
-/**
-限制接口频率
-*/
-func restrictions() gin.HandlerFunc {
-	return func(context *gin.Context) {
-		//请求类型
-		m := context.Request.Method
-		//只有 post  put  delete 才会限制
-		if m == http.MethodPost || m == http.MethodPut || m == http.MethodDelete {
-			//	获取请求地址
-			p := context.Request.URL.Path
-			//	获取请求ip
-			i := ip.GetIp(context)
-			//	当前时间(s)
-			t := time.Now().Unix()
-			if _, ok := restricts[i]; ok {
-				//	如果存在
-				if p == restricts[i].p {
-					//	如果本次请求和记录的上次请求一致
-					if (restricts[i].t + 1) < t {
-						rs := restriction{
-							p: p,
-							i: i,
-							t: t,
-						}
-						restricts[i] = rs
-						context.Next()
-					} else {
-						context.Abort()
-						context.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请求太频繁"})
-					}
-				} else {
-					rs := restriction{
-						p: p,
-						i: i,
-						t: t,
-					}
-					restricts[i] = rs
-					context.Next()
-				}
-			} else {
-				rs := restriction{
-					p: p,
-					i: i,
-					t: t,
-				}
-				restricts[i] = rs
-				context.Next()
 			}
 		}
 	}
