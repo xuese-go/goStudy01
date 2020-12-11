@@ -3,4 +3,4 @@ db:
   dsn: "root:root@tcp(127.0.0.1:3306)/goStudy01?charset=utf8&parseTime=true&loc=Local"
 #上传文件地址
 file:
-  path: "e:\\"
+  path: "d:\\"

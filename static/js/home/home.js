@@ -1,4 +1,3 @@
-// var t;
 var Toast;
 $(function () {
     let t = sessionStorage.getItem("xueSeToken")
@@ -16,6 +15,7 @@ $(function () {
         dataType: "json",
         beforeSend: function (request) {
             request.setRequestHeader("xueSeToken", sessionStorage.getItem("xueSeToken"));
+            $(":submit").addClass("disabled")
         },
         success: function (response, status, xhr) {
             //响应头部
@@ -26,23 +26,28 @@ $(function () {
         },
         error: function (err) {
             console.log(err)
-            if (err.status === 200) {
-            } else if (err.status === 404) {
+            if (err.status === 404) {
                 alter2(4, "资源不存在")
             } else {
                 if (err.responseJSON.success !== undefined && !err.responseJSON.success) {
                     if (err.responseJSON.data === 'logout') {
                         alter2(4, err.responseJSON.msg + "3秒后跳转登录页")
+                        $('div').remove()
                         setTimeout(function () {
                             window.location.href = window.origin + "/"
                         }, 3000);
                     } else if (err.responseJSON.data === '!admin') {
+                        alter2(4, err.responseJSON.msg)
+                    } else {
                         alter2(4, err.responseJSON.msg)
                     }
                 } else {
                     alter2(4, "资源错误")
                 }
             }
+        },
+        complete: function () {
+            $(":submit").removeClass("disabled")
         }
     });
     //----------------------------------------------------------------------
