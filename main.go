@@ -9,4 +9,9 @@ import (
 总入口
 */
 func main() {
+	//user:=structs.UserStruct{
+	//	Account: "11@qq.com",
+	//	Password: "111111",
+	//}
+	//service.Save(user)
 }
