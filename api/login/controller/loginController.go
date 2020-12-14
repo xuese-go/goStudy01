@@ -5,6 +5,7 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/cache"
 	"github.com/xuese-go/goStudy01/util/ip"
 	"github.com/xuese-go/goStudy01/util/jwt"
 	"github.com/xuese-go/goStudy01/util/md5"
@@ -29,6 +30,7 @@ func Login(context *gin.Context) {
 				resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "令牌生成失败"})
 				return
 			} else {
+				cache.CreateContainersFactory().AddToken(token, ip2)
 				resp.Respone(context, resp.ResponeStruct{Success: true, Data: token})
 				return
 			}

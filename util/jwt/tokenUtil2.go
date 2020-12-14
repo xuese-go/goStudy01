@@ -22,6 +22,8 @@ func GenerateToken(str string, ip string) (string, error) {
 		StandardClaims: jwt.StandardClaims{
 			//签发时间
 			IssuedAt: time.Now().Unix(),
+			//生效开始时间
+			NotBefore: time.Now().Unix(),
 			//过期时间
 			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(),
 			//	发放者

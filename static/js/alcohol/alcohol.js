@@ -1,12 +1,16 @@
 var pageNum = 1
 var pageSize = 8
 $(function () {
-//分页
-    page()
-//    加载所有品牌
-    loadBrand()
-//    加载所有系列
-    loadSeries()
+
+    //同步异步操作
+    runAsyncPage()
+        .then(function (d) {
+            return runAsyncBrand()
+        })
+        .then(function (d) {
+            return runAsyncSeries()
+        })
+
 //查询
     $("#form-search").bind("click", function () {
         page()
@@ -48,6 +52,27 @@ $(function () {
         })
     })
 })
+
+function runAsyncPage() {
+    return new Promise(function (resolve, reject) {
+        //分页
+        page()
+    });
+}
+
+function runAsyncBrand() {
+    return new Promise(function (resolve, reject) {
+//    加载所有品牌
+        loadBrand()
+    });
+}
+
+function runAsyncSeries() {
+    return new Promise(function (resolve, reject) {
+//    加载所有系列
+        loadSeries()
+    });
+}
 
 //分页标签
 function pageLabel(o) {
@@ -162,6 +187,7 @@ function loadBrand() {
         }
     })
 }
+
 //加载所有系列
 function loadSeries() {
     $("#seriesId").find("option").remove()

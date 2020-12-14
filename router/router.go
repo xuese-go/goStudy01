@@ -16,12 +16,12 @@ import (
 	seriesRouter "github.com/xuese-go/goStudy01/api/series/router"
 	userController "github.com/xuese-go/goStudy01/api/user/controller"
 	"github.com/xuese-go/goStudy01/api/user/service"
+	"github.com/xuese-go/goStudy01/cache"
 	"github.com/xuese-go/goStudy01/config"
 	"github.com/xuese-go/goStudy01/util/ip"
 	"github.com/xuese-go/goStudy01/util/jwt"
 	"github.com/xuese-go/goStudy01/util/md5"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -98,8 +98,18 @@ func routers(r *gin.Engine) {
 	}
 
 	//api路由
-	apis := r.Group("/api", restrictions(), interceptToken())
+	apis := r.Group("/api")
 	{
+
+		//跨域
+		apis.Use(Cors())
+		//接口次数限制
+		apis.Use(restrictions())
+		//令牌缓存是否存在判断
+		apis.Use(cache.CreateContainersFactory().IsCacheToken())
+		//令牌合法性判断
+		apis.Use(interceptToken())
+
 		//file
 		file := apis.Group("/file")
 		file.POST("/up", controller.Up)
@@ -171,7 +181,6 @@ func interceptToken() gin.HandlerFunc {
 		} else {
 			//	判断token
 			token := c.Request.Header.Get("xueSeToken")
-			log.Println("token:", token)
 			if token != "" {
 				//令牌合法性验证
 				if b, t := jwt.ParseToken(token); b {
@@ -180,18 +189,19 @@ func interceptToken() gin.HandlerFunc {
 					//是否与签发ip一致
 					if t.Subject == md5.Enc(ip2, "逗你玩!!!") {
 						t2, _ := jwt.GenerateToken(t.Issuer, ip2)
+						cache.CreateContainersFactory().AddToken(t2, ip2)
 						c.Header("token", t2)
 						c.Next()
 					} else {
-						c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+						c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录R1", Data: "logout"})
 						c.Abort()
 					}
 				} else {
-					c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+					c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录R2", Data: "logout"})
 					c.Abort()
 				}
 			} else {
-				c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录", Data: "logout"})
+				c.JSON(http.StatusInternalServerError, structs.ResponeStruct{Success: false, Msg: "请从新登录R3", Data: "logout"})
 				c.Abort()
 			}
 		}

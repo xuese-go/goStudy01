@@ -23,6 +23,9 @@ type restriction struct {
 	t int64
 }
 
+/**
+限制请求次数
+*/
 func restrictions() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		//请求类型
