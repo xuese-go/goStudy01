@@ -14,7 +14,6 @@ import (
 
 //线程安全
 var sMap sync.Map
-var rw sync.RWMutex
 
 // 创建一个容器工厂
 func CreateContainersFactory() *cacheToken {
@@ -28,10 +27,8 @@ type cacheToken struct {
 添加token
 */
 func (ct *cacheToken) AddToken(token string, ip string) {
-	rw.Lock()
 	sMap.Store(ip, token)
 	log.Println("新增令牌", token)
-	rw.Unlock()
 }
 
 /**
@@ -40,10 +37,8 @@ func (ct *cacheToken) AddToken(token string, ip string) {
 func (ct *cacheToken) isToken(token string, ip string) bool {
 	if v, ok := sMap.Load(ip); ok {
 		if v == token {
-			rw.Lock()
 			sMap.Delete(ip)
 			log.Println("销毁令牌", token)
-			rw.Unlock()
 			return true
 		}
 	}
