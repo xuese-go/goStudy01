@@ -23,7 +23,7 @@ func GenerateToken(str string, ip string) (string, error) {
 			//签发时间
 			IssuedAt: time.Now().Unix(),
 			//过期时间
-			ExpiresAt: time.Now().Add(5 * time.Minute).Unix(),
+			ExpiresAt: time.Now().Add(15 * time.Minute).Unix(),
 			//	发放者
 			Issuer: str,
 			//	主题
