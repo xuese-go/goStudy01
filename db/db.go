@@ -9,7 +9,7 @@ import (
 	seriesStructs "github.com/xuese-go/goStudy01/api/series/structs"
 	userStructs "github.com/xuese-go/goStudy01/api/user/structs"
 	"github.com/xuese-go/goStudy01/config"
-	"log"
+	"github.com/xuese-go/goStudy01/log"
 )
 
 var Db *gorm.DB
@@ -18,10 +18,10 @@ func init() {
 	var err error
 	dsn := config.C.Db.Dsn //"root:root@tcp(127.0.0.1:3306)/goStudy01?charset=utf8&parseTime=true&loc=Local"
 	if Db, err = gorm.Open("mysql", dsn); err != nil {
-		log.Println("数据库连接失败")
-		log.Println(err.Error())
+		log.SugarLogger.Errorf("数据库连接失败")
+		log.SugarLogger.Errorf(err.Error())
 	} else {
-		log.Println("数据库连接成功")
+		log.SugarLogger.Infof("数据库连接成功")
 		//打印sql
 		Db.LogMode(true)
 		//创建表

@@ -17,13 +17,13 @@ func Up(context *gin.Context) {
 	}
 	//if file, err := context.FormFile("file"); err != nil {
 	//	resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "上传失败"})
-	//	log.Panicln(err.Error())
+	//	log.SugarLogger.Errorf(err.Error())
 	//} else {
 	//	fin := filepath.Ext(file.Filename)
 	//	fileName := uuid.NewV4().String() + fin
 	//	if err := context.SaveUploadedFile(file, path.PATH+fileName); err != nil {
 	//		resp.Respone(context, resp.ResponeStruct{Success: false, Msg: "上传失败"})
-	//		log.Panicln(err.Error())
+	//		log.SugarLogger.Errorf(err.Error())
 	//	} else {
 	//		resp.Respone(context, resp.ResponeStruct{Success: true, Msg: "上传成功", Data: fileName})
 	//	}

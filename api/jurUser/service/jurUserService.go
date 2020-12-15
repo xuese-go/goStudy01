@@ -6,7 +6,7 @@ import (
 	jurStruct "github.com/xuese-go/goStudy01/api/jurisdiction/structs"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/db"
-	"log"
+	"github.com/xuese-go/goStudy01/log"
 )
 
 /**
@@ -17,7 +17,7 @@ func Update(id string, jurs []string) resp.ResponeStruct {
 	tx := dba.Begin()
 	us := make([]jurStruct.JurisdictionStruct, 0)
 	if err := tx.Find(&us, "userId = ?", id).Delete(&us).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		tx.Rollback()
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
@@ -34,7 +34,7 @@ func Update(id string, jurs []string) resp.ResponeStruct {
 		}
 		if err := tx.Exec(insertSql).Error; err != nil {
 			tx.Rollback()
-			log.Println(tx.Error)
+			log.SugarLogger.Errorf(tx.Error.Error())
 			return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 		} else {
 			tx.Commit()
@@ -61,7 +61,7 @@ func FindByUserId(uuid string) resp.ResponeStruct {
 	dba = dba.Table("jur_user_table").Select([]string{"uuid", "jur_name", "jur_flag"})
 	dba = dba.Joins("left join jurisdiction_table on jurisdiction_table.uuid = jur_user_table.jurId")
 	if err := dba.Scan(&us).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
 	return resp.ResponeStruct{Success: true, Data: us}

@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "github.com/xuese-go/goStudy01/db"
+	_ "github.com/xuese-go/goStudy01/log"
 	_ "github.com/xuese-go/goStudy01/router"
 )
 

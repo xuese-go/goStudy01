@@ -5,9 +5,9 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/structs"
 	"github.com/xuese-go/goStudy01/db"
+	"github.com/xuese-go/goStudy01/log"
 	"github.com/xuese-go/goStudy01/util/md5"
 	util "github.com/xuese-go/goStudy01/util/page"
-	"log"
 	"time"
 )
 
@@ -37,7 +37,7 @@ func Save(user structs.UserStruct) resp.ResponeStruct {
 	t := tx.Create(user)
 	if t.Error != nil {
 		t.Rollback()
-		log.Println(d.Error.Error())
+		log.SugarLogger.Errorf(d.Error.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
 	t.Commit()
@@ -52,7 +52,7 @@ func DeleteById(uuid string) resp.ResponeStruct {
 	tx := dba.Begin()
 	var u structs.UserStruct
 	if err := tx.First(&u, "uuid = ?", uuid).Delete(&u).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		tx.Rollback()
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
@@ -68,7 +68,7 @@ func Update(user structs.UserStruct) resp.ResponeStruct {
 	tx := dba.Begin()
 	var u structs.UserStruct
 	if err := dba.First(&u, "uuid = ?", user.Uuid).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
 	}
 	if user.Role != 0 {
@@ -90,7 +90,7 @@ func Update(user structs.UserStruct) resp.ResponeStruct {
 	t := tx.Save(&u)
 	if t.Error != nil {
 		t.Rollback()
-		log.Println(t.Error.Error())
+		log.SugarLogger.Errorf(t.Error.Error())
 		return resp.ResponeStruct{Success: false, Msg: "失败"}
 	}
 	t.Commit()
@@ -105,7 +105,7 @@ func UpdateImg(src string, uuid string) resp.ResponeStruct {
 	tx := dba.Begin()
 	var u structs.UserStruct
 	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
 	}
 	u.Portrait = src
@@ -113,7 +113,7 @@ func UpdateImg(src string, uuid string) resp.ResponeStruct {
 	t := tx.Save(&u)
 	if t.Error != nil {
 		t.Rollback()
-		log.Println(t.Error.Error())
+		log.SugarLogger.Errorf(t.Error.Error())
 		return resp.ResponeStruct{Success: false, Msg: "失败"}
 	}
 	t.Commit()
@@ -127,7 +127,7 @@ func One(uuid string) resp.ResponeStruct {
 	dba := db.Db
 	var u structs.UserStruct
 	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
 	}
 	u.Password = ""
@@ -141,7 +141,7 @@ func IsState(uuid string) resp.ResponeStruct {
 	dba := db.Db
 	var u structs.UserStruct
 	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
 	}
 	u.Password = ""
@@ -155,7 +155,7 @@ func IsRole(uuid string) resp.ResponeStruct {
 	dba := db.Db
 	var u structs.UserStruct
 	if err := dba.First(&u, "uuid = ?", uuid).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "查询错误"}
 	}
 	u.Password = ""
@@ -169,7 +169,7 @@ func ByAccount(account string) resp.ResponeStruct {
 	dba := db.Db
 	var u structs.UserStruct
 	if err := dba.First(&u, "account = ?", account).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "账号或密码错误"}
 	}
 	return resp.ResponeStruct{Success: true, Msg: "操作成功", Data: u}
@@ -197,7 +197,7 @@ func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct
 	var count int
 	dba = dba.Find(&us).Count(&count)
 	if dba.Error != nil {
-		log.Println(dba.Error.Error())
+		log.SugarLogger.Errorf(dba.Error.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
 
@@ -209,7 +209,7 @@ func Page(pageNum int, pageSize int, user structs.UserStruct) resp.ResponeStruct
 	//查询
 	if err := dba.Table("user_table").Select([]string{"uuid", "account", "role", "state", "portrait"}).Scan(&us).Error; err != nil {
 		//if err := dba.Find(&us).Error; err != nil {
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return resp.ResponeStruct{Success: false, Msg: "操作失败"}
 	}
 	return resp.ResponeStruct{Success: true, Data: us, Page: util.PageUtil(count, pageSize, pageNum)}

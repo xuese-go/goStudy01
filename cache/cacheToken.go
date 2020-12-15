@@ -6,7 +6,7 @@ package cache
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/xuese-go/goStudy01/api/respone/structs"
-	"log"
+	"github.com/xuese-go/goStudy01/log"
 	"net/http"
 	"strings"
 	"sync"
@@ -28,7 +28,7 @@ type cacheToken struct {
 */
 func (ct *cacheToken) AddToken(token string, ip string) {
 	sMap.Store(ip, token)
-	log.Println("新增令牌", token)
+	log.SugarLogger.Infof("新增令牌:%s", token)
 }
 
 /**
@@ -38,7 +38,7 @@ func (ct *cacheToken) isToken(token string, ip string) bool {
 	if v, ok := sMap.Load(ip); ok {
 		if v == token {
 			sMap.Delete(ip)
-			log.Println("销毁令牌", token)
+			log.SugarLogger.Infof("销毁令牌:%s", token)
 			return true
 		}
 	}

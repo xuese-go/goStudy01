@@ -4,6 +4,7 @@
 package router
 
 import (
+	"github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	alcoholRouter "github.com/xuese-go/goStudy01/api/alcohol/router"
 	brandRouter "github.com/xuese-go/goStudy01/api/brand/router"
@@ -18,13 +19,13 @@ import (
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/cache"
 	"github.com/xuese-go/goStudy01/config"
+	"github.com/xuese-go/goStudy01/log"
 	"github.com/xuese-go/goStudy01/util/ip"
 	"github.com/xuese-go/goStudy01/util/jwt"
 	"github.com/xuese-go/goStudy01/util/md5"
-	"io"
 	"net/http"
-	"os"
 	"strings"
+	"time"
 )
 
 /*
@@ -34,9 +35,20 @@ func init() {
 	// 加载默认配置
 	r := gin.Default()
 
-	//日志
-	file, _ := os.OpenFile("goStudy01.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0)
-	gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
+	////日志
+	//file, _ := os.OpenFile("goStudy01.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0)
+	//gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
+
+	//logger, _ := zap.NewProduction()
+	// Add a ginzap middleware, which:
+	//   - Logs all requests, like a combined access and error log.
+	//   - Logs to stdout.
+	//   - RFC3339 with UTC time format.
+	r.Use(ginzap.Ginzap(log.SugarLogger.Desugar(), time.RFC3339, true))
+
+	// Logs all panic to error log
+	//   - stack means whether output the stack info.
+	r.Use(ginzap.RecoveryWithZap(log.SugarLogger.Desugar(), true))
 
 	// 路由
 	routers(r)
@@ -161,7 +173,7 @@ func routers(r *gin.Engine) {
 	// r.POST("/upload", func(c *gin.Context) {
 	// 	// single file
 	// 	file, _ := c.FormFile("file")
-	// 	log.Println(file.Filename)
+	// 	log.SugarLogger.Errorf(file.Filename)
 
 	// 	// Upload the file to specific dst.
 	// 	// c.SaveUploadedFile(file, dst)

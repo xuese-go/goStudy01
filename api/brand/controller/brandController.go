@@ -5,7 +5,7 @@ import (
 	"github.com/xuese-go/goStudy01/api/brand/service"
 	"github.com/xuese-go/goStudy01/api/brand/structs"
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
-	"log"
+	"github.com/xuese-go/goStudy01/log"
 	"strconv"
 )
 
@@ -16,7 +16,7 @@ func Save(ctx *gin.Context) {
 	var mod structs.BrandStructs
 	if err := ctx.ShouldBind(&mod); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
-		log.Panic(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return
 	}
 
@@ -40,7 +40,7 @@ func Update(ctx *gin.Context) {
 	var mod structs.BrandStructs
 	if err := ctx.ShouldBind(&mod); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
-		log.Panic(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return
 	}
 

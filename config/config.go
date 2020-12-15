@@ -1,9 +1,9 @@
 package config
 
 import (
+	"github.com/xuese-go/goStudy01/log"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -26,11 +26,11 @@ type file struct {
 func (cfg *Cfg) getCfg() *error {
 	f, _ := os.Getwd()
 	if c, err := ioutil.ReadFile(f + "/conf.yaml"); err != nil {
-		log.Panicln(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return &err
 	} else if err = yaml.Unmarshal(c, &cfg); err != nil {
 		//	二进制转换为字符，如果有错误
-		log.Println(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return &err
 	} else {
 		return nil

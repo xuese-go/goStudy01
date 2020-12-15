@@ -2,8 +2,8 @@ package jwt
 
 import (
 	"github.com/dgrijalva/jwt-go"
+	"github.com/xuese-go/goStudy01/log"
 	"github.com/xuese-go/goStudy01/util/md5"
-	"log"
 	"time"
 )
 
@@ -52,40 +52,40 @@ func ParseToken(tokenStr string) (bool, *Claims) {
 	} else if ve, ok := err.(*jwt.ValidationError); ok {
 		//令牌格式不正确
 		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-			log.Println("That's not even a token")
+			log.SugarLogger.Errorf("That's not even a token")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorUnverifiable != 0 {
-			log.Println("由于签名问题，无法验证令牌")
+			log.SugarLogger.Errorf("由于签名问题，无法验证令牌")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorSignatureInvalid != 0 {
-			log.Println("签名验证失败")
+			log.SugarLogger.Errorf("签名验证失败")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorAudience != 0 {
-			log.Println("AUD验证失败")
+			log.SugarLogger.Errorf("AUD验证失败")
 			return false, nil
 		} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
 			// 令牌已过期或尚未激活
-			log.Println("EXP验证失败")
+			log.SugarLogger.Errorf("EXP验证失败")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorIssuedAt != 0 {
-			log.Println("IAT验证失败")
+			log.SugarLogger.Errorf("IAT验证失败")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorIssuer != 0 {
-			log.Println("ISS验证失败")
+			log.SugarLogger.Errorf("ISS验证失败")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorId != 0 {
-			log.Println("JTI验证失败")
+			log.SugarLogger.Errorf("JTI验证失败")
 			return false, nil
 		} else if ve.Errors&jwt.ValidationErrorClaimsInvalid != 0 {
-			log.Println("通用声明验证错误")
+			log.SugarLogger.Errorf("通用声明验证错误")
 			return false, nil
 		} else {
 			//无法处理此令牌
-			log.Println("Couldn't handle this token:", err)
+			log.SugarLogger.Errorf("Couldn't handle this token:", err)
 			return false, nil
 		}
 	} else {
-		log.Println("Couldn't handle this token:", err)
+		log.SugarLogger.Errorf("Couldn't handle this token:", err)
 		return false, nil
 	}
 }

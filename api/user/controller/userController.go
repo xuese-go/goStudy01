@@ -5,9 +5,9 @@ import (
 	resp "github.com/xuese-go/goStudy01/api/respone/structs"
 	"github.com/xuese-go/goStudy01/api/user/service"
 	"github.com/xuese-go/goStudy01/api/user/structs"
+	"github.com/xuese-go/goStudy01/log"
 	"github.com/xuese-go/goStudy01/util/file"
 	"github.com/xuese-go/goStudy01/util/jwt"
-	"log"
 	"strconv"
 )
 
@@ -19,7 +19,7 @@ func Save(ctx *gin.Context) {
 	var user structs.UserStruct
 	if err := ctx.ShouldBind(&user); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
-		log.Panic(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return
 	}
 
@@ -48,7 +48,7 @@ func Update(ctx *gin.Context) {
 	var user structs.UserStruct
 	if err := ctx.ShouldBind(&user); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
-		log.Panic(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return
 	}
 
@@ -82,7 +82,7 @@ func RestPwd(ctx *gin.Context) {
 	var user structs.UserStruct
 	if err := ctx.ShouldBind(&user); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
-		log.Panic(err.Error())
+		log.SugarLogger.Errorf(err.Error())
 		return
 	}
 

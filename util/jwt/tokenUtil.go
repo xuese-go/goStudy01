@@ -3,7 +3,7 @@ package jwt
 //
 //import (
 //	"github.com/dgrijalva/jwt-go"
-//	"log"
+//	"github.com/xuese-go/goStudy01/log"
 //	"time"
 //)
 //
@@ -64,7 +64,7 @@ package jwt
 //func IsToken(token string) bool {
 //	//解析
 //	if t, err := ParseToken(token); err != nil {
-//		log.Println("令牌解析错误")
+//		log.SugarLogger.Errorf("令牌解析错误")
 //		return false
 //	} else {
 //		//签名
