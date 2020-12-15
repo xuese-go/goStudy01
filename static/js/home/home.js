@@ -9,53 +9,8 @@ $(function () {
         toast: true,
         position: 'top-end',
     });
-//    全局设置
-    $.ajaxSetup({
-        timeout: 2000,
-        dataType: "json",
-        beforeSend: function (request) {
-            request.setRequestHeader("xueSeToken", sessionStorage.getItem("xueSeToken"));
-            $(":submit").addClass("disabled")
-        },
-        success: function (response, status, xhr) {
-            //响应头部
-            let to = xhr.getResponseHeader("token")
-            if (to != null) {
-                sessionStorage.setItem("xueSeToken", to);
-            }
-        },
-        error: function (err) {
-            console.log(err)
-            if (err.status === 404) {
-                alter2(4, "资源不存在")
-            } else {
-                if (err.responseJSON.success !== undefined && !err.responseJSON.success) {
-                    if (err.responseJSON.data === 'logout') {
-                        alter2(4, err.responseJSON.msg + "3秒后跳转登录页")
-                        $('div').remove()
-                        setTimeout(function () {
-                            window.location.href = window.origin + "/"
-                        }, 3000);
-                    } else if (err.responseJSON.data === '!admin') {
-                        alter2(4, err.responseJSON.msg)
-                    } else {
-                        alter2(4, err.responseJSON.msg)
-                    }
-                } else {
-                    alter2(4, "资源错误")
-                }
-            }
-        },
-        complete: function () {
-            $(":submit").removeClass("disabled")
-        }
-    });
-    //----------------------------------------------------------------------
 
-    //获取消息
-    getNotice()
-    //获取当前登录用户信息
-    getInfo()
+    //----------------------------------------------------------------------
 
     //注销登录
     $("#logout").click(function () {
@@ -74,6 +29,10 @@ $(function () {
                 $("#content").html(e)
             })
         }
+    })
+
+    getInfo().then(function () {
+        return getNotice()
     })
 })
 
@@ -116,10 +75,7 @@ function alter2IsOk(butText) {
 
 //获取所有通知
 function getNotice() {
-    $.ajax("/api/notice/notice", {
-        type: "GET",
-        dataType: 'json'
-    }).done(function (e) {
+    return myAjax("/api/notice/notice", "GET", null, function (e) {
         if (e.success) {
             $("#notice-num").text(e.data.length)
             $(e.data).each(function (i, obj) {
@@ -137,10 +93,7 @@ function getNotice() {
 }
 
 function getInfo() {
-    $.ajax("/api/user/user", {
-        type: "GET",
-        dataType: 'json'
-    }).done(function (e) {
+    return myAjax("/api/user/user", "GET", null, function (e) {
         if (e.success) {
             if (e.data.role === 2) {
                 $(".admin").show()
