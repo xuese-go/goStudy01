@@ -1,3 +1,6 @@
+/**
+demo来源于网络
+*/
 package log
 
 import (
@@ -13,16 +16,6 @@ import (
 func init() {
 	InitLog("./info.log", "./error.log", zap.InfoLevel)
 	defer logger.Sync()
-
-	//sugarLogger.Infof("sugarLogger name:%s", "修华师1")
-	//sugarLogger.Infow("sugarLogger", zap.String("name", "修华师2"))
-	//sugarLogger.Errorf("sugarLogger name:%s", "修华师3")
-	//sugarLogger.Debugf("sugarLogger name:%s", "修华师4")
-	//sugarLogger.Warnf("sugarLogger name:%s", "修华师5")
-	//
-	//logger.Info("logger", zap.String("name", "修华师6"))
-	//logger.Error("logger", zap.String("name", "修华师7"))
-	//logger.Debug("logger", zap.String("name", "修华师8"))
 }
 
 //只能输出结构化日志，但是性能要高于 SugaredLogger
