@@ -55,24 +55,12 @@ function pageLabel(o) {
 function page() {
     $("#table-content").find("tr").remove()
     $("#table-page").find("li").remove()
-    return myAjax("/api/alcohol/alcohols", "GET", {
+    return myAjax("/api/alcohol/alcohol", "GET", {
         "pageNum": pageNum,
         "pageSize": pageSize,
         "name": $("#table_search").val()
     }, function (e) {
-        if (e.success) {
-            $(e.data).each(function (i, o) {
-                $("#table-content").append(trs(i, o))
-            })
-//    分页
-            if (e.page !== undefined && e.page !== null) {
-                $(e.page.pageData).each(function (i, o) {
-                    let a = (o === pageNum ? 'active' : '')
-                    let l = '<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
-                    $("#table-page").append(l)
-                })
-            }
-        }
+        tablePage(e, pageNum)
     })
 }
 
@@ -132,7 +120,7 @@ function one(e) {
 function loadBrand() {
     $("#brandId").find("option").remove()
     $("#brandId2").find("option").remove()
-    return myAjax("/api/brand/brands", "GET", {
+    return myAjax("/api/brand/brand", "GET", {
         "pageNum": pageNum,
         "pageSize": pageSize,
     }, function (e) {
@@ -149,7 +137,7 @@ function loadBrand() {
 function loadSeries() {
     $("#seriesId").find("option").remove()
     $("#seriesId2").find("option").remove()
-    return myAjax("/api/series/seriess", "GET", {
+    return myAjax("/api/series/series", "GET", {
         "pageNum": pageNum,
         "pageSize": pageSize,
     }, function (e) {

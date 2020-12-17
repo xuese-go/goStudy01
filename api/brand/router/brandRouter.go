@@ -21,8 +21,8 @@ api路由
 func BrandRouter(r *gin.RouterGroup) {
 	brand := r.Group("/brand")
 	brand.POST("/brand", brandRouter.Save)
-	brand.DELETE("/brand/:deleteId", brandRouter.Delete)
-	brand.PUT("/brand/:putId", brandRouter.Update)
-	brand.GET("/brand/:getId", brandRouter.One)
-	brand.GET("/brands", brandRouter.Page)
+	brand.DELETE("/brand/:id", brandRouter.Delete)
+	brand.PUT("/brand/:id", brandRouter.Update)
+	brand.GET("/brand/:id", brandRouter.One)
+	brand.GET("/brand", brandRouter.Page)
 }

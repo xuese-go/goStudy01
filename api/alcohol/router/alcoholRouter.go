@@ -24,8 +24,8 @@ api路由
 func AlcoholRouter(r *gin.RouterGroup) {
 	alcohol := r.Group("/alcohol")
 	alcohol.POST("/alcohol", alcoholRouter.Save)
-	alcohol.DELETE("/alcohol/:deleteId", alcoholRouter.Delete)
-	alcohol.PUT("/alcohol/:putId", alcoholRouter.Update)
-	alcohol.GET("/alcohol/:getId", alcoholRouter.One)
-	alcohol.GET("/alcohols", alcoholRouter.Page)
+	alcohol.DELETE("/alcohol/:id", alcoholRouter.Delete)
+	alcohol.PUT("/alcohol/:id", alcoholRouter.Update)
+	alcohol.GET("/alcohol/:id", alcoholRouter.One)
+	alcohol.GET("/alcohol", alcoholRouter.Page)
 }

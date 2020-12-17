@@ -10,11 +10,7 @@ $(function () {
     //新增
     $("#form-save").on("submit", function (ev) {
         ev.preventDefault();
-        $.ajax("/api/user/user", {
-            type: "POST",
-            dataType: 'json',
-            data: $('#form-save').serialize()
-        }).done(function (e) {
+        return myAjax("/api/user/user", "POST", $('#form-save').serialize(), function (e) {
             if (e.success) {
                 alter2(1, "成功")
                 $("#btn-to-save").click()
@@ -28,11 +24,7 @@ $(function () {
 //    修改
     $("#form-update").on("submit", function (ev) {
         ev.preventDefault();
-        $.ajax("/api/user/user/" + $("#uuid2").val(), {
-            type: "PUT",
-            dataType: 'json',
-            data: $('#form-update').serialize()
-        }).done(function (e) {
+        return myAjax("/api/user/user/" + $("#uuid2").val(), "PUT", $('#form-update').serialize(), function (e) {
             if (e.success) {
                 alter2(1, "成功")
                 $("#btn-to-update").click()
@@ -55,63 +47,47 @@ function pageLabel(o) {
 function page() {
     $("#table-content").find("tr").remove()
     $("#table-page").find("li").remove()
-    $.ajax("/api/user/users", {
-        type: "GET",
-        dataType: 'json',
-        data: {
-            "pageNum": pageNum,
-            "pageSize": pageSize,
-            "account": $("#table_search").val()
-        }
-    }).done(function (e) {
-        if (e.success) {
-            $(e.data).each(function (i, o) {
-                $("#table-content").append(trs(i, o))
-            })
-            //    分页
-            if (e.page !== undefined && e.page !== null) {
-                $(e.page.pageData).each(function (i, o) {
-                    let a = (o === pageNum ? 'active' : '')
-                    let l = '<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
-                    $("#table-page").append(l)
-                })
-            }
-        } else {
-
-        }
+    return myAjax("/api/user/user", "GET", {
+        "pageNum": pageNum,
+        "pageSize": pageSize,
+        "account": $("#table_search").val()
+    }, function (e) {
+        let title = ["account", "role", "state", "btn"]
+        tablePage(e, title)
     })
 }
 
 //tr模板
-function trs(i, e) {
-    return '<tr>'
-        + '<td>' + (i + 1) + '</td>'
-        + '<td>' + (e.account) + '</td>'
-        + '<td>'
-        + (e.role === 1 ? '<span class="badge bg-primary">普通</span>' : '<span class="badge bg-danger">管理员</span>')
-        + '</td>'
-        + '<td>'
-        + (e.state === 1 ? '<span class="badge bg-success">正常</span>' : '<span class="badge bg-secondary">停用</span>')
-        + '</td>'
-        + '<td>'
-        + '<button type="button" class="btn btn-danger btn-xs" onclick="del(\'' + e.uuid + '\')">删除</button>'
-        + '&nbsp;&nbsp;'
-        + '<button type="button" class="btn btn-warning btn-xs" onclick="one(\'' + e.uuid + '\')"' +
-        ' data-toggle="modal" data-target="#modal-update">修改/查看</button>'
-        + '&nbsp;&nbsp;'
-        + '<button type="button" class="btn btn-warning btn-xs" onclick="restPwd(\'' + e.uuid + '\')">重置密码</button>'
-        + '</td>'
-        + '</tr>'
+function trs(i, data, title) {
+    $("#table-content").append("<tr>")
+    let tr = $('#table-content').find('tr:last');
+
+    $(tr).append("<td>")
+    $(tr).find('td:last').text(i + 1)
+
+    $(title).each(function (i2, e2) {
+        $(tr).append("<td>")
+        if (e2 === "role") {
+            let r = (data[e2] === 1 ? '<span class="badge bg-primary">普通</span>' : '<span class="badge bg-danger">管理员</span>')
+            $(tr).find('td:last').html(r)
+        } else if (e2 === "state") {
+            let r = (data[e2] === 1 ? '<span class="badge bg-success">正常</span>' : '<span class="badge bg-secondary">停用</span>')
+            $(tr).find('td:last').html(r)
+        } else if (e2 === "btn") {
+            $(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-danger btn-xs\" onclick=\"del(\'" + data.uuid + "\')\">删除</button>")
+            $(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-warning btn-xs\" onclick=\"one(\'" + data.uuid + "\')\" data-toggle=\"modal\" data-target=\"#modal-update\">修改/查看</button>")
+            $(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-warning btn-xs\" onclick=\"restPwd(\'" + data.uuid + "\')\">重置密码</button>")
+        } else {
+            $(tr).find('td:last').text(data[e2])
+        }
+    })
 }
 
 //删除
 function del(o) {
     alter2IsOk("是否确定删除？").then(function (e) {
         if (e.value) {
-            $.ajax("/api/user/user/" + o, {
-                type: "DELETE",
-                dataType: 'json'
-            }).done(function (e) {
+            return myAjax("/api/user/user/" + o, "DELETE", null, function (e) {
                 if (e.success) {
                     page()
                 } else {
@@ -124,10 +100,7 @@ function del(o) {
 
 //根据id获取
 function one(e) {
-    $.ajax("/api/user/user/" + e, {
-        type: "GET",
-        dataType: 'json'
-    }).done(function (e) {
+    return myAjax("/api/user/user/" + e, "GET", null, function (e) {
         if (e.success) {
             $("#uuid2").val(e.data.uuid)
             $("#exampleInputEmail12").val(e.data.account)
@@ -141,10 +114,7 @@ function one(e) {
 
 //根据id重置密码
 function restPwd(e) {
-    $.ajax("/api/user/rest/pwd/" + e, {
-        type: "GET",
-        dataType: 'json'
-    }).done(function (e) {
+    return myAjax("/api/user/rest/pwd/" + e, "GET", null, function (e) {
         if (e.success) {
             alter2(1, "重置成功")
         } else {

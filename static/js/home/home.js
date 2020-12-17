@@ -93,7 +93,7 @@ function getNotice() {
 }
 
 function getInfo() {
-    return myAjax("/api/user/user", "GET", null, function (e) {
+    return myAjax("/api/user/userInfo", "GET", null, function (e) {
         if (e.success) {
             if (e.data.role === 2) {
                 $(".admin").show()

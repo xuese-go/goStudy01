@@ -27,7 +27,7 @@ func Save(ctx *gin.Context) {
 根据主键删除
 */
 func Delete(ctx *gin.Context) {
-	uuid := ctx.Param("deleteId")
+	uuid := ctx.Param("id")
 	respond := service.DeleteById(uuid)
 	resp.Respone(ctx, respond)
 }
@@ -36,7 +36,7 @@ func Delete(ctx *gin.Context) {
 根据id修改
 */
 func Update(ctx *gin.Context) {
-	uuid := ctx.Param("putId")
+	uuid := ctx.Param("id")
 	var jur structs.JurisdictionStruct
 	if err := ctx.ShouldBind(&jur); err != nil {
 		resp.Respone(ctx, resp.ResponeStruct{Success: false, Msg: "参数绑定错误"})
@@ -53,7 +53,7 @@ func Update(ctx *gin.Context) {
 根据主键查询
 */
 func One(ctx *gin.Context) {
-	uuid := ctx.Param("getId")
+	uuid := ctx.Param("id")
 	respond := service.One(uuid)
 	resp.Respone(ctx, respond)
 }

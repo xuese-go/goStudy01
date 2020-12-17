@@ -23,8 +23,8 @@ api路由
 func {{.ModStruct}}Router(r *gin.RouterGroup){
 {{.ModPath}} := r.Group("/{{.ModPath}}")
 {{.ModPath}}.POST("/{{.ModPath}}", {{.ControllerName}}.Save)
-{{.ModPath}}.DELETE("/{{.ModPath}}/:deleteId", {{.ControllerName}}.Delete)
-{{.ModPath}}.PUT("/{{.ModPath}}/:putId", {{.ControllerName}}.Update)
-{{.ModPath}}.GET("/{{.ModPath}}/:getId", {{.ControllerName}}.One)
-{{.ModPath}}.GET("/{{.ModPath}}s", {{.ControllerName}}.Page)
+{{.ModPath}}.DELETE("/{{.ModPath}}/:id", {{.ControllerName}}.Delete)
+{{.ModPath}}.PUT("/{{.ModPath}}/:id", {{.ControllerName}}.Update)
+{{.ModPath}}.GET("/{{.ModPath}}/:id", {{.ControllerName}}.One)
+{{.ModPath}}.GET("/{{.ModPath}}", {{.ControllerName}}.Page)
 }

@@ -47,24 +47,14 @@ page()
 function page() {
 $("#table-content").find("tr").remove()
 $("#table-page").find("li").remove()
-return myAjax("/api/{{.ModPath}}/{{.ModPath}}s", "GET",{
+return myAjax("/api/{{.ModPath}}/{{.ModPath}}", "GET",{
 "pageNum": pageNum,
 "pageSize": pageSize,
 //"jurName": $("#table_search").val()
 },function (e) {
 if (e.success) {
 $(e.data).each(function (i, o) {
-$("#table-content").append(trs(i, o))
-})
-//    分页
-if (e.page !== undefined && e.page !== null) {
-$(e.page.pageData).each(function (i, o) {
-let a = (o === pageNum ? 'active' : '')
-let l ='<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
-$("#table-page").append(l)
-})
-}
-}
+tablePage(e, pageNum)
 })
 }
 

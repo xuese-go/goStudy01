@@ -24,8 +24,8 @@ api路由
 func SeriesRouter(r *gin.RouterGroup) {
 	series := r.Group("/series")
 	series.POST("/series", seriesRouter.Save)
-	series.DELETE("/series/:deleteId", seriesRouter.Delete)
-	series.PUT("/series/:putId", seriesRouter.Update)
-	series.GET("/series/:getId", seriesRouter.One)
-	series.GET("/seriess", seriesRouter.Page)
+	series.DELETE("/series/:id", seriesRouter.Delete)
+	series.PUT("/series/:id", seriesRouter.Update)
+	series.GET("/series/:id", seriesRouter.One)
+	series.GET("/series", seriesRouter.Page)
 }

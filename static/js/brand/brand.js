@@ -10,11 +10,7 @@ $(function () {
     //新增
     $("#form-save").on("submit", function (ev) {
         ev.preventDefault();
-        $.ajax("/api/brand/brand", {
-            type: "POST",
-            dataType: 'json',
-            data: $('#form-save').serialize()
-        }).done(function (e) {
+        return myAjax("/api/brand/brand", "POST", $('#form-save').serialize(), function (e) {
             if (e.success) {
                 alter2(1, "成功")
                 $("#btn-to-save").click()
@@ -28,11 +24,7 @@ $(function () {
 //    修改
     $("#form-update").on("submit", function (ev) {
         ev.preventDefault();
-        $.ajax("/api/brand/brand/" + $("#uuid2").val(), {
-            type: "PUT",
-            dataType: 'json',
-            data: $('#form-update').serialize()
-        }).done(function (e) {
+        return myAjax("/api/brand/brand/" + $("#uuid2").val(), "PUT", $('#form-update').serialize(), function (e) {
             if (e.success) {
                 alter2(1, "成功")
                 $("#btn-to-update").click()
@@ -55,28 +47,12 @@ function pageLabel(o) {
 function page() {
     $("#table-content").find("tr").remove()
     $("#table-page").find("li").remove()
-    $.ajax("/api/brand/brands", {
-        type: "GET",
-        dataType: 'json',
-        data: {
-            "pageNum": pageNum,
-            "pageSize": pageSize,
-            "name": $("#table_search").val()
-        }
-    }).done(function (e) {
-        if (e.success) {
-            $(e.data).each(function (i, o) {
-                $("#table-content").append(trs(i, o))
-            })
-            //    分页
-            if (e.page !== undefined && e.page !== null) {
-                $(e.page.pageData).each(function (i, o) {
-                    let a = (o === pageNum ? 'active' : '')
-                    let l = '<li class="page-item ' + a + '" onclick="pageLabel(\'' + o + '\')"><a class="page-link" href="#">' + o + '</a></li>'
-                    $("#table-page").append(l)
-                })
-            }
-        }
+    return myAjax("/api/brand/brand", "GET", {
+        "pageNum": pageNum,
+        "pageSize": pageSize,
+        "name": $("#table_search").val()
+    }, function (e) {
+        tablePage(e, pageNum)
     })
 }
 
@@ -98,10 +74,7 @@ function trs(i, e) {
 function del(o) {
     alter2IsOk("是否确定删除？").then(function (e) {
         if (e.value) {
-            $.ajax("/api/brand/brand/" + o, {
-                type: "DELETE",
-                dataType: 'json'
-            }).done(function (e) {
+            return myAjax("/api/brand/brand/" + o, "DELETE", null, function (e) {
                 if (e.success) {
                     page()
                 } else {
@@ -114,10 +87,7 @@ function del(o) {
 
 //根据id获取
 function one(e) {
-    $.ajax("/api/brand/brand/" + e, {
-        type: "GET",
-        dataType: 'json'
-    }).done(function (e) {
+    return myAjax("/api/brand/brand/" + e, "GET", null, function (e) {
         if (e.success) {
             $("#uuid2").val(e.data.uuid)
             $("#name2").val(e.data.name)
