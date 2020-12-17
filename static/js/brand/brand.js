@@ -52,22 +52,9 @@ function page() {
         "pageSize": pageSize,
         "name": $("#table_search").val()
     }, function (e) {
-        tablePage(e, pageNum)
+        let title = ["name", "btn"]
+        tablePage(e, title, "")
     })
-}
-
-//tr模板
-function trs(i, e) {
-    return '<tr>'
-        + '<td>' + (i + 1) + '</td>'
-        + '<td>' + e.name + '</td>'
-        + '<td>'
-        + '<button type="button" class="btn btn-danger btn-xs" onclick="del(\'' + e.uuid + '\')">删除</button>'
-        + '&nbsp;&nbsp;'
-        + '<button type="button" class="btn btn-warning btn-xs" onclick="one(\'' + e.uuid + '\')"' +
-        ' data-toggle="modal" data-target="#modal-update">修改/查看</button>'
-        + '</td>'
-        + '</tr>'
 }
 
 //删除

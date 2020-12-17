@@ -53,13 +53,12 @@ return myAjax("/api/{{.ModPath}}/{{.ModPath}}", "GET",{
 //"jurName": $("#table_search").val()
 },function (e) {
 if (e.success) {
-$(e.data).each(function (i, o) {
-tablePage(e, pageNum)
-})
+let title = ["uuid"]
+tablePage(e, title)
 }
 
 //tr模板
-function trs(i, e) {
+function trs(i, data, title) {
 $("#table-content").append("<tr>")
 let tr = $('#table-content').find('tr:last');
 
@@ -69,9 +68,15 @@ $(tr).find('td:last').text(i + 1)
 //$(tr).append("<td>")
 //$(tr).find('td:last').text(e.name)
 
+$(title).each(function (i2, e2) {
 $(tr).append("<td>")
-$(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-danger btn-xs\" onclick=\"del(\'" + e.uuid + "\')\">删除</button>")
-$(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-warning btn-xs\" onclick=\"one(\'" + e.uuid + "\')\" data-toggle=\"modal\" data-target=\"#modal-update\">修改/查看</button>")
+if (e2 === "btn") {
+$(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-danger btn-xs\" onclick=\"del(\'" + data.uuid + "\')\">删除</button>")
+$(tr).find('td:last').append("&nbsp;&nbsp;<button type=\"button\" class=\"btn btn-warning btn-xs\" onclick=\"one(\'" + data.uuid + "\')\" data-toggle=\"modal\" data-target=\"#modal-update\">修改/查看</button>")
+} else {
+$(tr).find('td:last').text(data[e2])
+}
+})
 }
 
 //删除
