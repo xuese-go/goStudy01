@@ -4,6 +4,8 @@ $.ajaxSetup({
     dataType: "json",
     beforeSend: function (request) {
         request.setRequestHeader("xueSeToken", sessionStorage.getItem("xueSeToken"));
+        $("#loading").show()
+        $("#content").hide()
         $(":submit").addClass("disabled")
     },
     success: function (response, status, xhr) {
@@ -17,30 +19,40 @@ $.ajaxSetup({
         if (err.status === 404) {
             alter2(4, "资源不存在")
         } else {
-            if (err.responseJSON.success !== undefined && !err.responseJSON.success) {
-                if (err.responseJSON.data === 'logout') {
-                    $('div').remove()
-                    $('body').append("<span>"+err.responseJSON.msg+"3秒后跳转登录页</span>")
-                    setTimeout(function () {
-                        window.location.href = window.origin + "/"
-                    }, 3000);
-                } else if (err.responseJSON.data === '!admin') {
-                    alter2(4, err.responseJSON.msg)
-                } else {
-                    alter2(4, err.responseJSON.msg)
+            for (let p in err) {
+                if (err.hasOwnProperty(p)) {
+                    if ("responseJSON" === p) {
+                        for (let p1 in err[p]) {
+                            if (err[p].hasOwnProperty(p1)) {
+                                if ("data" === p1) {
+                                    if(err[p][p1] === "logout"){
+                                        $('div').remove()
+                                        $('body').append("<span>"+err.responseJSON.msg+"3秒后跳转登录页</span>")
+                                        setTimeout(function () {
+                                            window.location.href = window.origin + "/"
+                                        }, 3000);
+                                    }else if(err[p][p1] === "!admin"){
+                                        alter2(4, err.responseJSON.msg)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-            } else {
-                alter2(4, "资源错误")
             }
         }
     },
     complete: function () {
-        $(":submit").removeClass("disabled")
+        setTimeout(function () {
+            $("#loading").hide()
+            $("#content").show()
+            $(":submit").removeClass("disabled")
+        }, 500);
     }
 });
 
-function myAjax(url, type, data,callback) {
-    var p = new Promise(function (resolve, reject) {
+function myAjax(url, type, data, callback) {
+    return new Promise(function (resolve, reject) {
         $.ajax(url, {
             type: type,
             dataType: 'json',
@@ -48,9 +60,8 @@ function myAjax(url, type, data,callback) {
         }).done(function (e) {
             callback(e)
             resolve()
-        }).fail(function(){
+        }).fail(function () {
             reject();
         })
     })
-    return p
 }
