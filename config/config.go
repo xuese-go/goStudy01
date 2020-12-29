@@ -7,9 +7,10 @@ import (
 	"os"
 )
 
-type Cfg struct {
+type cfg struct {
 	Db   db   `yaml:"db"`
 	File file `yaml:"file"`
+	Dev  int  `yaml:"dev"`
 }
 
 type db struct {
@@ -20,19 +21,14 @@ type file struct {
 	Path string `yaml:"path"`
 }
 
-/**
-读取配置文件，并转成结构体
-*/
-func (cfg *Cfg) getCfg() *error {
+var C = cfg{}
+
+func init() {
 	f, _ := os.Getwd()
 	if c, err := ioutil.ReadFile(f + "/conf.yaml"); err != nil {
 		log.SugarLogger.Errorf(err.Error())
-		return &err
-	} else if err = yaml.Unmarshal(c, &cfg); err != nil {
+	} else if err = yaml.Unmarshal(c, &C); err != nil {
 		//	二进制转换为字符，如果有错误
 		log.SugarLogger.Errorf(err.Error())
-		return &err
-	} else {
-		return nil
 	}
 }

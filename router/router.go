@@ -35,6 +35,9 @@ func init() {
 	// 加载默认配置
 	r := gin.Default()
 
+	//相关配置
+	options(r)
+
 	////日志
 	//file, _ := os.OpenFile("goStudy01.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0)
 	//gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
@@ -55,6 +58,58 @@ func init() {
 
 	// 启动并监听默认8080端口
 	_ = r.Run(":8080")
+}
+
+//路由相关配置 Engine
+func options(r *gin.Engine) {
+
+	//生产中使用释放模式,该模式会忽略一些输出,例如加载的静态资源和注册的路由地址等
+	if config.C.Dev > 1 {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
+	/**
+	以下为 引擎 engine 默认值
+	// New returns a new blank Engine instance without any middleware attached.
+	//New返回一个新的空白引擎实例，没有附加任何中间件。
+	// By default the configuration is:
+	//默认情况下，配置为：
+	//如果当前路由无法匹配但
+	//存在带有（不带）尾部斜杠的路径的处理程序。
+	//例如，如果请求了/foo/但路由只存在于/foo，则
+	//对于GET请求，客户端重定向到/foo，http状态代码为301
+	//307用于所有其他请求方法。
+	// - RedirectTrailingSlash:  true
+	//如果启用，路由器将尝试修复当前请求路径（如果没有）
+	//已为其注册句柄。
+	//第一个多余的路径元素，如../或//被删除。
+	//之后，路由器对清理后的路径进行不区分大小写的查找。
+	//如果可以找到此路由的句柄，路由器将进行重定向
+	//对于GET请求，状态代码为301，对于GET请求，状态代码为307
+	//所有其他请求方法。
+	//例如/FOO和/。//FOO可以重定向到/FOO。
+	//RedirectTrailingSlash独立于此选项。
+	// - RedirectFixedPath:      false
+	//如果启用，路由器将检查是否允许另一种方法用于
+	//当前路由，如果当前请求无法路由。
+	//如果是这种情况，则用“方法不允许”来回答请求
+	//和HTTP状态码405。
+	//如果不允许使用其他方法，则将请求委托给NotFound
+	//处理程序。
+	//猜测这样可能就不会出现404
+	// - HandleMethodNotAllowed: false
+	//由客户端IP转发
+	//猜测跟重定向方式相关
+	// - ForwardedByClientIP:    true
+	//如果true， url.RawPath 会被用来查找参数
+	// - UseRawPath:             false
+	//如果为true，则将取消对路径值的转义。
+	//如果UseRawPath为false（默认情况下），则UnescapePathValues为true，
+	//作为url.Path路径将被使用，这已经是不可替代的。
+	// - UnescapePathValues:     true
+	//请求的最大内存 默认32MB
+	MaxMultipartMemory int64
+	*/
 }
 
 // 路由绑定路径集合
