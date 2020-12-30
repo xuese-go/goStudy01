@@ -4,7 +4,7 @@
 package router
 
 import (
-	"github.com/gin-contrib/zap"
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	alcoholRouter "github.com/xuese-go/goStudy01/api/alcohol/router"
 	brandRouter "github.com/xuese-go/goStudy01/api/brand/router"
@@ -37,21 +37,6 @@ func init() {
 
 	//相关配置
 	options(r)
-
-	////日志
-	//file, _ := os.OpenFile("goStudy01.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0)
-	//gin.DefaultWriter = io.MultiWriter(file, os.Stdout)
-
-	//logger, _ := zap.NewProduction()
-	// Add a ginzap middleware, which:
-	//   - Logs all requests, like a combined access and error log.
-	//   - Logs to stdout.
-	//   - RFC3339 with UTC time format.
-	r.Use(ginzap.Ginzap(log.SugarLogger.Desugar(), time.RFC3339, true))
-
-	// Logs all panic to error log
-	//   - stack means whether output the stack info.
-	r.Use(ginzap.RecoveryWithZap(log.SugarLogger.Desugar(), true))
 
 	// 路由
 	routers(r)
@@ -110,6 +95,17 @@ func options(r *gin.Engine) {
 	//请求的最大内存 默认32MB
 	MaxMultipartMemory int64
 	*/
+
+	//logger, _ := zap.NewProduction()
+	// Add a ginzap middleware, which:
+	//   - Logs all requests, like a combined access and error log.
+	//   - Logs to stdout.
+	//   - RFC3339 with UTC time format.
+	r.Use(ginzap.Ginzap(log.SugarLogger.Desugar(), time.RFC3339, true))
+
+	// Logs all panic to error log
+	//   - stack means whether output the stack info.
+	r.Use(ginzap.RecoveryWithZap(log.SugarLogger.Desugar(), true))
 }
 
 // 路由绑定路径集合
@@ -119,6 +115,7 @@ func routers(r *gin.Engine) {
 	r.LoadHTMLGlob("views/**/*")
 	//静态文件路径
 	r.Static("/static", "static")
+	//上传图片使用
 	r.Static("/file", config.C.File.Path)
 
 	//页面路由
